@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="" />
+    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="Start" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,6 +10,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Inbarher/Ex2.git",
+    "accountId": "3a1c9dcc-b956-4710-a335-272cacae7cc9"
+  }
+}]]></component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 2
 }]]></component>
@@ -24,6 +30,10 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "C:/Users/Inbar/java projects/Ex2/src/Main.java",
     "vue.rearranger.settings.migration": "true"
@@ -45,12 +55,41 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735555604417</updated>
-      <workItem from="1735555605326" duration="1000" />
+      <workItem from="1735555605326" duration="311000" />
     </task>
+    <task id="LOCAL‎-00001" summary="Start">
+      <option name="closed" value="true" />
+      <created>1735555773669</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL‎-00001" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1735555773669</updated>
+    </task>
+    <task id="LOCAL‎-00002" summary="Start">
+      <option name="closed" value="true" />
+      <created>1735555828716</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL‎-00002" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1735555828716</updated>
+    </task>
+    <task id="LOCAL‎-00003" summary="Start">
+      <option name="closed" value="true" />
+      <created>1735555913235</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL‎-00003" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1735555913235</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Start" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
