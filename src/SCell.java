@@ -1,3 +1,10 @@
+//import org.junit.*;
+//import static org.junit.Assert.*;
+import org.junit.Assert;
+import org.junit.jupiter.api.Test;
+//import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 // Add your documentation below:
 
 public class SCell implements Cell {
@@ -25,13 +32,14 @@ public class SCell implements Cell {
     }
 
     @Override
-public void setData(String s) {
+    public void setData(String s) {
         // Add your code here
         line = s;
         /////////////////////
     }
+
     @Override
-    public String getData() {
+    public String getData() {//מה שאני קולטת מהמתא
         return line;
     }
 
@@ -50,4 +58,29 @@ public void setData(String s) {
         // Add your code here
 
     }
+
+    public boolean isNumber(String text) {
+        boolean result = false;
+        try{
+            Double.parseDouble(text);
+            return true;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean isForm(String text) {
+        boolean form = true;
+        if (text.charAt(0) != '=') {
+            form = false;
+            return form;
+        }
+        return form;
+    }
+
+
+
+
+
 }

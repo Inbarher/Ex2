@@ -28,12 +28,12 @@ public interface Sheet {
      *
      */
     public int width();
-
+//A-I in number 0-8
     /**
      * @return the dimension (length) of the y-coordinate of this spreadsheet.
      */
     public int height();
-
+//1-16 in number 0-15
     /**
      * This method changes the x,y cell to a cell with the data c.
      * @param x integer, x-coordinate of the cell.

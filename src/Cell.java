@@ -20,6 +20,7 @@ public interface Cell {
     /**
      * Returns the type of this cell {TEXT,NUMBER, FORM, ERR_CYCLE_FORM, ERR_WRONG_FORM}
      * @return an int value (as defined in Ex2Utils)
+     * TEXT=1, NUMBER=2, FORM=3, ERR_FORM_FORMAT=-2, ERR_CYCLE_FORM=-1, ERR=-1
      */
     public int getType();
 

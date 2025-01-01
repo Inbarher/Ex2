@@ -22,7 +22,7 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String value(int x, int y) {
         String ans = Ex2Utils.EMPTY_CELL;
-        // Add your code here
+        // Add your code here קליטת המחרוזת מהמשתמש מה שהוא מקליד
 
         Cell c = get(x,y);
         if(c!=null) {ans = c.toString();}
@@ -39,7 +39,7 @@ public class Ex2Sheet implements Sheet {
     @Override
     public Cell get(String cords) {
         Cell ans = null;
-        // Add your code here
+        // Add your code hereA1==01
 
         /////////////////////
         return ans;
@@ -57,7 +57,7 @@ public class Ex2Sheet implements Sheet {
     public void set(int x, int y, String s) {
         Cell c = new SCell(s);
         table[x][y] = c;
-        // Add your code here
+        // Add your code here התא שהמשתמש בוחר קליטת מהמשתמש
 
         /////////////////////
     }
@@ -72,7 +72,7 @@ public class Ex2Sheet implements Sheet {
     @Override
     public boolean isIn(int xx, int yy) {
         boolean ans = xx>=0 && yy>=0;
-        // Add your code here
+        // Add your code here A-I //1-16
 
         /////////////////////
         return ans;
@@ -105,7 +105,7 @@ public class Ex2Sheet implements Sheet {
     public String eval(int x, int y) {
         String ans = null;
         if(get(x,y)!=null) {ans = get(x,y).toString();}
-        // Add your code here
+        // Add your code hereחישוב ערך התא מחזיר מספר
 
         /////////////////////
         return ans;
