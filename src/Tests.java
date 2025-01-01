@@ -12,6 +12,16 @@ public class Tests {
     }
 
     @Test
+    void testisText() {
+        SCell sCell = new SCell("1");
+        Assert.assertEquals(false, sCell.isText("1"));
+        Assert.assertEquals(false, sCell.isText("=1"));
+        Assert.assertEquals(true, sCell.isText("fh"));
+        Assert.assertEquals(true, sCell.isText("88A"));
+    }
+
+
+    @Test
     void testisNumber() {
         SCell sCell = new SCell("1");
         Assert.assertEquals(true, sCell.isNumber("1"));

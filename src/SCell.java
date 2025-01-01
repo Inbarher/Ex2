@@ -70,6 +70,16 @@ public class SCell implements Cell {
         }
     }
 
+    public boolean isText(String text) {
+       // boolean result = true;
+        if (text.charAt(0)=='=' || isNumber(text)) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     public boolean isForm(String text) {
         boolean form = true;
         if (text.charAt(0) != '=') {
