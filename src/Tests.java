@@ -31,4 +31,28 @@ public class Tests {
         Assert.assertEquals(true, sCell.isNumber("1.2"));
         Assert.assertEquals(true, sCell.isNumber("-1.2"));
     }
+
+    @Test
+    void testisForm () {
+        SCell sCell = new SCell("1");
+        Assert.assertEquals(true, sCell.isForm("=1"));
+        Assert.assertEquals(false, sCell.isForm("fh"));
+        Assert.assertEquals(true, sCell.isForm("=(4*2+5)+5*4"));
+        Assert.assertEquals(true, sCell.isForm("=(4*2+(4+5))"));
+        Assert.assertEquals(true, sCell.isForm("=(4*2)+(5+4)"));
+        Assert.assertEquals(true, sCell.isForm("=(4*2+(4+5))+(5+5)"));
+        Assert.assertEquals(false, sCell.isForm("=4*2+(4+5))+(5+5)"));
+        Assert.assertEquals(false, sCell.isForm("=(4*2+4+5))+(5+5)"));
+        Assert.assertEquals(true, sCell.isForm("=(4*2+(+5))+(5+5)"));
+        Assert.assertEquals(true, sCell.isForm("=(4*2-(+5))+(-5)"));
+        Assert.assertEquals(false, sCell.isForm("=(4**2+(4+5))+(5+5)"));
+        Assert.assertEquals(true, sCell.isForm("=-(4+5)"));
+        Assert.assertEquals(true, sCell.isForm("=-(4*2+(4+5))+(5+5)"));
+        Assert.assertEquals(false, sCell.isForm("=(4*2a+(4+5))+(5+5)"));
+        Assert.assertEquals(true, sCell.isForm("=(4*2+ 4+5)+(5+5)"));
+        Assert.assertEquals(true, sCell.isForm("=+(4*2+4+5)+(5+5)"));
+        Assert.assertEquals(true, sCell.isForm("=+(4*2+4+5)+(-5+5)"));
+        Assert.assertEquals(false, sCell.isForm("=*(4)"));
+        Assert.assertEquals(false, sCell.isForm("=*(4*2-(+5))+(-5)"));
+    }
 }
