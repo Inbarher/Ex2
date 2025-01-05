@@ -1,15 +1,12 @@
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Tests {
-    @Test
-    void testIsForm() {
-        SCell sCell = new SCell("=1");
-        Assert.assertEquals(true, sCell.isForm("=1"));
-
-    }
 
     @Test
     void testisText() {
@@ -54,5 +51,12 @@ public class Tests {
         Assert.assertEquals(true, sCell.isForm("=+(4*2+4+5)+(-5+5)"));
         Assert.assertEquals(false, sCell.isForm("=*(4)"));
         Assert.assertEquals(false, sCell.isForm("=*(4*2-(+5))+(-5)"));
+    }
+
+    @Test
+    void testComputeForm (){
+        Ex2Sheet ex2Sheet = new Ex2Sheet();
+        Assert.assertEquals(4.0, "=(5-2*3)");
+
     }
 }

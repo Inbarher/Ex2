@@ -105,9 +105,113 @@ public class Ex2Sheet implements Sheet {
     public String eval(int x, int y) {
         String ans = null;
         if(get(x,y)!=null) {ans = get(x,y).toString();}
+        Cell cell = get(x, y);
+        if (cell != null && cell.getType() == Ex2Utils.FORM) {
+            try {
+                return String.valueOf(computeForm(cell.getData()));
+            } catch (Exception e) {
+                return Ex2Utils.ERR_FORM;
+            }
+        }
         // Add your code hereחישוב ערך התא מחזיר מספר
-
         /////////////////////
         return ans;
         }
+
+
+
+
+    public Double computeForm(String form) {
+        // הסרת סימן '=' אם קיים
+        if (form.startsWith("=")) {
+            form = form.substring(1).trim();
+        }
+
+        // אם הביטוי מתחיל ב-'+' או '-'
+        if (form.startsWith("+")) {
+            return computeForm(form.substring(1));
+        }
+        if (form.startsWith("-") && form.length()>1 && form.charAt(1) == '(') {
+            int counter = 1;
+            for (int i = 2; i < form.length(); i++) {
+                if (form.charAt(i) == '(') {
+                    counter++;
+                } else if (form.charAt(i) == ')') {
+                    counter--;
+                    if (counter == 0) {
+                        // חישוב הביטוי בתוך הסוגריים והכפלה ב--1
+                        double insideValue = computeForm(form.substring(2, i));
+                        if (i + 1 < form.length()) {
+                            return -insideValue + computeForm(form.substring(i + 1));
+                        } else {
+                            return -insideValue;
+                        }
+                    }
+                }
+            }
+            throw new IllegalArgumentException("Unmatched parentheses in formula.");
+        }
+
+
+        // חיפוש וחישוב חיבור וחיסור
+        int counter = 0;
+        for (int i = form.length() - 1; i >= 0; i--) {
+            char c = form.charAt(i);
+
+            if (c == ')') {
+                counter++;
+            } else if (c == '(') {
+                counter--;
+            }
+
+            // אם האופרטור נמצא מחוץ לסוגריים
+            if (counter == 0 && (c == '+' || c == '-')&&i!=0) {
+                String leftPart = form.substring(0, i);
+                String rightPart = form.substring(i + 1);
+
+                if (c == '+') {
+                    return computeForm(leftPart) + computeForm(rightPart);
+                } else { // c == '-'
+                    return computeForm(leftPart) - computeForm(rightPart);
+                }
+            }
+        }
+
+        // חיפוש וחישוב כפל וחילוק
+        counter = 0;
+        for (int i = form.length() - 1; i >= 0; i--) {
+            char c = form.charAt(i);
+
+            if (c == ')') {
+                counter++;
+            } else if (c == '(') {
+                counter--;
+            }
+
+            // אם האופרטור נמצא מחוץ לסוגריים
+            if (counter == 0 && (c == '*' || c == '/')) {
+                String leftPart = form.substring(0, i);
+                String rightPart = form.substring(i + 1);
+
+                if (c == '*') {
+                    return computeForm(leftPart) * computeForm(rightPart);
+                } else { // c == '/'
+                    double denominator = computeForm(rightPart);
+                    if (denominator == 0) {
+                        throw new ArithmeticException("Infinity");
+                    }
+                    return computeForm(leftPart) / denominator;
+                }
+            }
+        }
+
+        // טיפול בסוגריים
+        if (form.startsWith("(") && form.endsWith(")") ) {
+            return computeForm(form.substring(1, form.length() - 1));
+        }
+
+        // אם הגענו לכאן, הביטוי הוא מספר
+        return Double.parseDouble(form);
+    }
+
 }

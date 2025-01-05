@@ -1,10 +1,4 @@
-//import org.junit.*;
-//import static org.junit.Assert.*;
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
-//import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 // Add your documentation below:
 
 public class SCell implements Cell {
@@ -13,8 +7,24 @@ public class SCell implements Cell {
     // Add your code here
 
     public SCell(String s) {
-        // Add your code here
-        setData(s);
+        line = s;
+        type = whatType(line);
+      //  setData(s);
+    }
+    public int whatType(String line){
+        if (isText(line)){
+            type = Ex2Utils.TEXT;
+        }
+        else if (isNumber(line)){
+            type = Ex2Utils.NUMBER;
+        }
+        else if (isForm(line)){
+            type = Ex2Utils.FORM;
+        }
+        else {
+            type = Ex2Utils.ERR;
+        }
+        return type;
     }
 
     @Override
@@ -35,7 +45,7 @@ public class SCell implements Cell {
     public void setData(String s) {
         // Add your code here
         line = s;
-        /////////////////////
+        type = whatType(line);
     }
 
     @Override
@@ -150,9 +160,5 @@ public class SCell implements Cell {
         //Otherwise it is not a formula.
         return false;
     }
-
-
-
-
 
 }

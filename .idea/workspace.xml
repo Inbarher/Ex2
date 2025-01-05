@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="isText - Definition and tests">
+    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="isForm- Definition and tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Ex2Sheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex2Sheet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SCell.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tests.java" afterDir="false" />
     </list>
@@ -56,6 +57,7 @@
     "Downloaded.Files.Path.Enabled": "true",
     "JUnit.SCell.executor": "Run",
     "JUnit.SCell.testIsForm.executor": "Run",
+    "JUnit.Tests.testComputeForm.executor": "Run",
     "JUnit.Tests.testIsForm.executor": "Run",
     "JUnit.Tests.testisForm.executor": "Run",
     "JUnit.Tests.testisNumber.executor": "Run",
@@ -85,12 +87,12 @@
       <recent name="C:\Users\Inbar\java projects\Ex2\src" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Tests.testisForm">
-    <configuration name="SCell.testIsForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.Tests.testComputeForm">
+    <configuration name="Tests.testComputeForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="SCell" />
-      <option name="METHOD_NAME" value="testIsForm" />
+      <option name="MAIN_CLASS_NAME" value="Tests" />
+      <option name="METHOD_NAME" value="testComputeForm" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -138,11 +140,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.Tests.testisForm" />
+        <item itemvalue="JUnit.Tests.testComputeForm" />
         <item itemvalue="JUnit.Tests.testisText" />
+        <item itemvalue="JUnit.Tests.testisForm" />
         <item itemvalue="JUnit.Tests.testisNumber" />
         <item itemvalue="JUnit.Tests.testIsForm" />
-        <item itemvalue="JUnit.SCell.testIsForm" />
       </list>
     </recent_temporary>
   </component>
@@ -163,7 +165,7 @@
       <option name="presentableId" value="Default" />
       <updated>1735555604417</updated>
       <workItem from="1735555605326" duration="14812000" />
-      <workItem from="1735713594767" duration="27597000" />
+      <workItem from="1735713594767" duration="38532000" />
     </task>
     <task id="LOCAL‎-00001" summary="Start">
       <option name="closed" value="true" />
@@ -221,7 +223,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1735775367973</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL‎-00008" summary="isForm- Definition and tests">
+      <option name="closed" value="true" />
+      <created>1736012731837</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL‎-00008" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1736012731837</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -255,7 +265,8 @@
     <MESSAGE value="Starting" />
     <MESSAGE value="isNumber - Definition and tests" />
     <MESSAGE value="isText - Definition and tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="isText - Definition and tests" />
+    <MESSAGE value="isForm- Definition and tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="isForm- Definition and tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -267,7 +278,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Tests.java</url>
-          <line>15</line>
+          <line>12</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
@@ -281,7 +292,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/SCell.java</url>
-          <line>84</line>
+          <line>78</line>
           <properties class="SCell" method="isForm">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -290,7 +301,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/Tests.java</url>
-          <line>35</line>
+          <line>32</line>
           <properties class="Tests" method="testisForm">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
