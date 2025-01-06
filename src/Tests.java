@@ -1,8 +1,5 @@
-import org.junit.Assert;
+import org.junit.Assert.*;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,52 +8,75 @@ public class Tests {
     @Test
     void testisText() {
         SCell sCell = new SCell("1");
-        Assert.assertEquals(false, sCell.isText("1"));
-        Assert.assertEquals(false, sCell.isText("=1"));
-        Assert.assertEquals(true, sCell.isText("fh"));
-        Assert.assertEquals(true, sCell.isText("88A"));
+        assertEquals(false, sCell.isText("1"));
+        assertEquals(false, sCell.isText("=1"));
+        assertEquals(true, sCell.isText("fh"));
+        assertEquals(true, sCell.isText("88A"));
     }
 
 
     @Test
     void testisNumber() {
         SCell sCell = new SCell("1");
-        Assert.assertEquals(true, sCell.isNumber("1"));
-        Assert.assertEquals(false, sCell.isNumber(" "));
-        Assert.assertEquals(false, sCell.isNumber(""));
-        Assert.assertEquals(false, sCell.isNumber("T"));
-        Assert.assertEquals(true, sCell.isNumber("1.2"));
-        Assert.assertEquals(true, sCell.isNumber("-1.2"));
+        assertEquals(true, sCell.isNumber("1"));
+        assertEquals(false, sCell.isNumber(" "));
+        assertEquals(false, sCell.isNumber(""));
+        assertEquals(false, sCell.isNumber("T"));
+        assertEquals(true, sCell.isNumber("1.2"));
+        assertEquals(true, sCell.isNumber("-1.2"));
     }
 
     @Test
     void testisForm () {
         SCell sCell = new SCell("1");
-        Assert.assertEquals(true, sCell.isForm("=1"));
-        Assert.assertEquals(false, sCell.isForm("fh"));
-        Assert.assertEquals(true, sCell.isForm("=(4*2+5)+5*4"));
-        Assert.assertEquals(true, sCell.isForm("=(4*2+(4+5))"));
-        Assert.assertEquals(true, sCell.isForm("=(4*2)+(5+4)"));
-        Assert.assertEquals(true, sCell.isForm("=(4*2+(4+5))+(5+5)"));
-        Assert.assertEquals(false, sCell.isForm("=4*2+(4+5))+(5+5)"));
-        Assert.assertEquals(false, sCell.isForm("=(4*2+4+5))+(5+5)"));
-        Assert.assertEquals(true, sCell.isForm("=(4*2+(+5))+(5+5)"));
-        Assert.assertEquals(true, sCell.isForm("=(4*2-(+5))+(-5)"));
-        Assert.assertEquals(false, sCell.isForm("=(4**2+(4+5))+(5+5)"));
-        Assert.assertEquals(true, sCell.isForm("=-(4+5)"));
-        Assert.assertEquals(true, sCell.isForm("=-(4*2+(4+5))+(5+5)"));
-        Assert.assertEquals(false, sCell.isForm("=(4*2a+(4+5))+(5+5)"));
-        Assert.assertEquals(true, sCell.isForm("=(4*2+ 4+5)+(5+5)"));
-        Assert.assertEquals(true, sCell.isForm("=+(4*2+4+5)+(5+5)"));
-        Assert.assertEquals(true, sCell.isForm("=+(4*2+4+5)+(-5+5)"));
-        Assert.assertEquals(false, sCell.isForm("=*(4)"));
-        Assert.assertEquals(false, sCell.isForm("=*(4*2-(+5))+(-5)"));
+        assertEquals(true, sCell.isForm("=1"));
+        assertEquals(false, sCell.isForm("fh"));
+        assertEquals(true, sCell.isForm("=(4*2+5)+5*4"));
+        assertEquals(true, sCell.isForm("=(4*2+(4+5))"));
+        assertEquals(true, sCell.isForm("=(4*2)+(5+4)"));
+        assertEquals(true, sCell.isForm("=(4*2+(4+5))+(5+5)"));
+        assertEquals(false, sCell.isForm("=4*2+(4+5))+(5+5)"));
+        assertEquals(false, sCell.isForm("=(4*2+4+5))+(5+5)"));
+        assertEquals(true, sCell.isForm("=(4*2+(+5))+(5+5)"));
+        assertEquals(true, sCell.isForm("=(4*2-(+5))+(-5)"));
+        assertEquals(false, sCell.isForm("=(4**2+(4+5))+(5+5)"));
+        assertEquals(true, sCell.isForm("=-(4+5)"));
+        assertEquals(true, sCell.isForm("=-(4*2+(4+5))+(5+5)"));
+        assertEquals(false, sCell.isForm("=(4*2a+(4+5))+(5+5)"));
+        assertEquals(true, sCell.isForm("=(4*2+ 4+5)+(5+5)"));
+        assertEquals(true, sCell.isForm("=+(4*2+4+5)+(5+5)"));
+        assertEquals(true, sCell.isForm("=+(4*2+4+5)+(-5+5)"));
+        assertEquals(false, sCell.isForm("=*(4)"));
+        assertEquals(false, sCell.isForm("=*(4*2-(+5))+(-5)"));
     }
 
     @Test
     void testComputeForm (){
-        Ex2Sheet ex2Sheet = new Ex2Sheet();
-        Assert.assertEquals(4.0, "=(5-2*3)");
-
+       Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
+       assertEquals(6.0, ex2Sheet.computeForm("=2*3"));
+       assertEquals(-7.0, ex2Sheet.computeForm("=-(4*2+(4+5))+(5+5)"));
+       assertEquals(0.0, ex2Sheet.computeForm("=(2-2)*3"));
+       assertEquals(-6.0, ex2Sheet.computeForm("=-(2-2+2)*3"));
+       assertEquals(7.0, ex2Sheet.computeForm("=1+2*3"));
+       assertEquals(5.0, ex2Sheet.computeForm("=-1+2*3"));
+       assertEquals(-7.0, ex2Sheet.computeForm("=-1+2*3/(3-4)"));
+       assertEquals(-5.0, ex2Sheet.computeForm("=+1+2*3/(3-4)"));
+       assertEquals(9.0, ex2Sheet.computeForm("=-(1+2)*3/(3-4)"));
+       assertEquals(-4.5, ex2Sheet.computeForm("=-(5+4)*(1-0.5)"));
+       assertEquals(15.0, ex2Sheet.computeForm("=3*(2+3)"));
+       assertEquals(-24.0, ex2Sheet.computeForm("=-(5+3)*3"));
+       assertEquals(3.0, ex2Sheet.computeForm("=2-(3-4)"));
+       assertEquals(12.0, ex2Sheet.computeForm("=2*(3+3)"));
+       assertEquals(-12.0, ex2Sheet.computeForm("=-(2+2+2)*2"));
+       assertEquals(0.0, ex2Sheet.computeForm("=(4-4)*5"));
+       assertEquals(5.0, ex2Sheet.computeForm("=-(10/2)+10"));
+       assertEquals(-5.0, ex2Sheet.computeForm("=5*(2-3)"));
+       assertEquals(10.0, ex2Sheet.computeForm("=(1+2)*4-2"));
+       assertEquals(-10.0, ex2Sheet.computeForm("=-(2+3)*2"));
+       assertEquals(12.0, ex2Sheet.computeForm("=2+2*(3+2)"));
+       assertEquals(-12.0, ex2Sheet.computeForm("=-(2+3)*2-2"));
+       assertEquals(10.0, ex2Sheet.computeForm("=2*(3+3)-2"));
+       assertEquals(-14.0, ex2Sheet.computeForm("=-(6-4)*7"));
+       assertEquals(24.0, ex2Sheet.computeForm("=4*(2+2+2)"));
     }
 }

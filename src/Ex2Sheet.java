@@ -2,7 +2,10 @@ import java.io.IOException;
 // Add your documentation below:
 
 public class Ex2Sheet implements Sheet {
+    //Holds all cells in the sheet
     private Cell[][] table;
+    //Holds computed values sheet
+    private Double [][] values;
     // Add your code here
 
     // ///////////////////
@@ -122,38 +125,44 @@ public class Ex2Sheet implements Sheet {
 
 
     public Double computeForm(String form) {
-        // הסרת סימן '=' אם קיים
+        // In order to calculate, remove the char '='.
         if (form.startsWith("=")) {
             form = form.substring(1).trim();
         }
 
-        // אם הביטוי מתחיל ב-'+' או '-'
+        // Handle the case where the first character is '-' or '+'
         if (form.startsWith("+")) {
             return computeForm(form.substring(1));
         }
+        //Finding the end of the minus's range of influence
         if (form.startsWith("-") && form.length()>1 && form.charAt(1) == '(') {
             int counter = 1;
+            int endIndex = form.length();
+
+            //Finding the first plus or minus outside the parentheses
             for (int i = 2; i < form.length(); i++) {
                 if (form.charAt(i) == '(') {
                     counter++;
                 } else if (form.charAt(i) == ')') {
                     counter--;
-                    if (counter == 0) {
-                        // חישוב הביטוי בתוך הסוגריים והכפלה ב--1
-                        double insideValue = computeForm(form.substring(2, i));
-                        if (i + 1 < form.length()) {
-                            return -insideValue + computeForm(form.substring(i + 1));
-                        } else {
-                            return -insideValue;
-                        }
-                    }
+                } else if ((form.charAt(i) == '+' || form.charAt(i) == '-') && counter == 0) {
+                    endIndex = i;
+                    break;
                 }
             }
-            throw new IllegalArgumentException("Unmatched parentheses in formula.");
+
+            //Calculate the full influence of minus
+            double insideValue = computeForm(form.substring(1, endIndex));
+
+            if (endIndex < form.length()) {
+                return -insideValue + computeForm(form.substring(endIndex));
+            } else {
+                return -insideValue;
+            }
         }
 
 
-        // חיפוש וחישוב חיבור וחיסור
+        //Search and calculate '+' and '-'
         int counter = 0;
         for (int i = form.length() - 1; i >= 0; i--) {
             char c = form.charAt(i);
@@ -164,8 +173,8 @@ public class Ex2Sheet implements Sheet {
                 counter--;
             }
 
-            // אם האופרטור נמצא מחוץ לסוגריים
-            if (counter == 0 && (c == '+' || c == '-')&&i!=0) {
+            //Only if the operator out of parentheses
+            if (counter == 0 && (c == '+' || c == '-') && i!=0) {
                 String leftPart = form.substring(0, i);
                 String rightPart = form.substring(i + 1);
 
@@ -177,7 +186,7 @@ public class Ex2Sheet implements Sheet {
             }
         }
 
-        // חיפוש וחישוב כפל וחילוק
+        //Search and calculate '*' and '/'
         counter = 0;
         for (int i = form.length() - 1; i >= 0; i--) {
             char c = form.charAt(i);
@@ -188,7 +197,7 @@ public class Ex2Sheet implements Sheet {
                 counter--;
             }
 
-            // אם האופרטור נמצא מחוץ לסוגריים
+            //Only if the operator out of parentheses
             if (counter == 0 && (c == '*' || c == '/')) {
                 String leftPart = form.substring(0, i);
                 String rightPart = form.substring(i + 1);
@@ -205,12 +214,12 @@ public class Ex2Sheet implements Sheet {
             }
         }
 
-        // טיפול בסוגריים
+        //In the case of '(', ')'
         if (form.startsWith("(") && form.endsWith(")") ) {
             return computeForm(form.substring(1, form.length() - 1));
         }
 
-        // אם הגענו לכאן, הביטוי הוא מספר
+        //Otherwise the expression is a number
         return Double.parseDouble(form);
     }
 
