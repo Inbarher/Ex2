@@ -15,7 +15,7 @@ public interface Index2D {
      * checks of the string representation of this index is valid "XY" as X is a letter "A-Z" (or "a-z"), and Y is an integer [0-99].
      * @return true iff this is a valid 2D index.
      */
-    public boolean isValid();
+    public boolean isValid(String s);
 
     /**
      *

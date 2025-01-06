@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="computeForm- Definition">
+    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="computeForm- Definition and Test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ex2Sheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex2Sheet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SCell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CellEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CellEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Index2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Index2D.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,59 +54,50 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Ex2GUI.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
-    &quot;JUnit.SCell.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.SCell.testIsForm.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.Tests.testComputeForm.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.Tests.testIsForm.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.Tests.testisForm.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.Tests.testisNumber.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.Tests.testisText.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Program Files/JetBrains/IntelliJ IDEA 2024.2.4/lib/junit4.jar&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/Inbar/java projects/Ex2/src/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.qodana&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Ex2GUI.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "true",
+    "JUnit.SCell.executor": "Run",
+    "JUnit.SCell.testIsForm.executor": "Run",
+    "JUnit.Tests.testComputeForm.executor": "Run",
+    "JUnit.Tests.testIsForm.executor": "Run",
+    "JUnit.Tests.testisForm.executor": "Run",
+    "JUnit.Tests.testisNumber.executor": "Run",
+    "JUnit.Tests.testisText.executor": "Run",
+    "JUnit.Tests.testisValid.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Program Files/JetBrains/IntelliJ IDEA 2024.2.4/lib/junit4.jar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/Inbar/java projects/Ex2/src/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "settings.qodana",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Inbar\java projects\Ex2\src" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Tests.testComputeForm">
+  <component name="RunManager" selected="JUnit.Tests.testisValid">
     <configuration name="Tests.testComputeForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Tests" />
       <option name="METHOD_NAME" value="testComputeForm" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Tests.testIsForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Ex2" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testIsForm" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -142,13 +133,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Tests.testisValid" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Ex2" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="Tests" />
+      <option name="METHOD_NAME" value="testisValid" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.Tests.testisValid" />
         <item itemvalue="JUnit.Tests.testComputeForm" />
         <item itemvalue="JUnit.Tests.testisText" />
         <item itemvalue="JUnit.Tests.testisForm" />
         <item itemvalue="JUnit.Tests.testisNumber" />
-        <item itemvalue="JUnit.Tests.testIsForm" />
       </list>
     </recent_temporary>
   </component>
@@ -171,7 +172,8 @@
       <workItem from="1735555605326" duration="14812000" />
       <workItem from="1735713594767" duration="56929000" />
       <workItem from="1736109783850" duration="7203000" />
-      <workItem from="1736122660761" duration="3740000" />
+      <workItem from="1736122660761" duration="3865000" />
+      <workItem from="1736160868450" duration="8272000" />
     </task>
     <task id="LOCAL‎-00001" summary="Start">
       <option name="closed" value="true" />
@@ -245,7 +247,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1736040309269</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL‎-00010" summary="computeForm- Definition and Test">
+      <option name="closed" value="true" />
+      <created>1736126520037</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL‎-00010" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1736126520037</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,16 +291,12 @@
     <MESSAGE value="isText - Definition and tests" />
     <MESSAGE value="isForm- Definition and tests" />
     <MESSAGE value="computeForm- Definition" />
-    <option name="LAST_COMMIT_MESSAGE" value="computeForm- Definition" />
+    <MESSAGE value="computeForm- Definition and Test" />
+    <option name="LAST_COMMIT_MESSAGE" value="computeForm- Definition and Test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/CellEntry.java</url>
-          <line>6</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/Cell.java</url>
           <line>12</line>
@@ -299,15 +305,6 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/SCell.java</url>
-          <line>97</line>
-          <properties class="SCell" method="isForm">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-field">
           <url>file://$PROJECT_DIR$/src/Ex2Sheet.java</url>

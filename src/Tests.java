@@ -79,4 +79,24 @@ public class Tests {
        assertEquals(-14.0, ex2Sheet.computeForm("=-(6-4)*7"));
        assertEquals(24.0, ex2Sheet.computeForm("=4*(2+2+2)"));
     }
+
+    @Test
+    void testisValid(){
+        CellEntry cellEntry = new CellEntry();
+        assertEquals(false, cellEntry.isValid("=4*(2+2+2)"));
+        assertEquals(false, cellEntry.isValid("0A"));
+        assertEquals(true, cellEntry.isValid("A0"));
+        assertEquals(true, cellEntry.isValid("a0"));
+        assertEquals(false, cellEntry.isValid("a"));
+        assertEquals(false, cellEntry.isValid("7"));
+        assertEquals(true, cellEntry.isValid("g77"));
+        assertEquals(false, cellEntry.isValid("5E"));
+        assertEquals(false, cellEntry.isValid("F6="));
+        assertEquals(false, cellEntry.isValid("F6&"));
+        assertEquals(false, cellEntry.isValid(""));
+        assertEquals(true, cellEntry.isValid("Y9"));
+        assertEquals(false, cellEntry.isValid("Y319"));
+        assertEquals(false, cellEntry.isValid("Aa2"));
+        assertEquals(false, cellEntry.isValid("2a"));
+    }
 }
