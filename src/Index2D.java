@@ -21,9 +21,9 @@ public interface Index2D {
      *
      * @return the x value (integer) of this index
      */
-    public int getX();
+    public int getX(String A0);
     /**
      * @return the y value (integer) of this index
      */
-    public int getY();
+    public int getY(String A0);
 }

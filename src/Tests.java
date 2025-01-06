@@ -98,5 +98,30 @@ public class Tests {
         assertEquals(false, cellEntry.isValid("Y319"));
         assertEquals(false, cellEntry.isValid("Aa2"));
         assertEquals(false, cellEntry.isValid("2a"));
+        assertEquals(false, cellEntry.isValid(null));
+    }
+
+    @Test
+    void testgetX(){
+        CellEntry cellEntry = new CellEntry();
+        assertEquals(0, cellEntry.getX("A2"));
+        assertEquals(1, cellEntry.getX("B27"));
+        assertEquals(25, cellEntry.getX("Z27"));
+        assertEquals(-1, cellEntry.getX("AA27"));
+        assertEquals(-1, cellEntry.getX("AAA27"));
+        assertEquals(3, cellEntry.getX("d4"));
+    }
+
+    @Test
+    void testgetY(){
+        CellEntry cellEntry = new CellEntry();
+        assertEquals(2, cellEntry.getY("A2"));
+        assertEquals(27, cellEntry.getY("B27"));
+        assertEquals(27, cellEntry.getY("Z27"));
+        assertEquals(-1, cellEntry.getY("AA27"));
+        assertEquals(-1, cellEntry.getY("AAA27"));
+        assertEquals(4, cellEntry.getY("d4"));
+        assertEquals(1, cellEntry.getY("a1"));
+        assertEquals(99, cellEntry.getY("j99"));
     }
 }

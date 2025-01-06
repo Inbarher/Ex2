@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="computeForm- Definition and Test">
+    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="isValid- Definition and Test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CellEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CellEntry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Index2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Index2D.java" afterDir="false" />
@@ -62,6 +62,8 @@
     "JUnit.SCell.testIsForm.executor": "Run",
     "JUnit.Tests.testComputeForm.executor": "Run",
     "JUnit.Tests.testIsForm.executor": "Run",
+    "JUnit.Tests.testgetX.executor": "Run",
+    "JUnit.Tests.testgetY.executor": "Run",
     "JUnit.Tests.testisForm.executor": "Run",
     "JUnit.Tests.testisNumber.executor": "Run",
     "JUnit.Tests.testisText.executor": "Run",
@@ -92,7 +94,7 @@
       <recent name="C:\Users\Inbar\java projects\Ex2\src" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.Tests.testisValid">
+  <component name="RunManager" selected="JUnit.Tests.testgetY">
     <configuration name="Tests.testComputeForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
@@ -103,21 +105,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tests.testisForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Tests.testgetX" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testisForm" />
+      <option name="METHOD_NAME" value="testgetX" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tests.testisNumber" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Tests.testgetY" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testisNumber" />
+      <option name="METHOD_NAME" value="testgetY" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -145,11 +147,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.Tests.testgetY" />
+        <item itemvalue="JUnit.Tests.testgetX" />
         <item itemvalue="JUnit.Tests.testisValid" />
         <item itemvalue="JUnit.Tests.testComputeForm" />
         <item itemvalue="JUnit.Tests.testisText" />
-        <item itemvalue="JUnit.Tests.testisForm" />
-        <item itemvalue="JUnit.Tests.testisNumber" />
       </list>
     </recent_temporary>
   </component>
@@ -173,7 +175,7 @@
       <workItem from="1735713594767" duration="56929000" />
       <workItem from="1736109783850" duration="7203000" />
       <workItem from="1736122660761" duration="3865000" />
-      <workItem from="1736160868450" duration="8272000" />
+      <workItem from="1736160868450" duration="11695000" />
     </task>
     <task id="LOCAL‎-00001" summary="Start">
       <option name="closed" value="true" />
@@ -255,7 +257,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1736126520037</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL‎-00011" summary="isValid- Definition and Test">
+      <option name="closed" value="true" />
+      <created>1736186586100</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL‎-00011" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1736186586100</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -292,7 +302,8 @@
     <MESSAGE value="isForm- Definition and tests" />
     <MESSAGE value="computeForm- Definition" />
     <MESSAGE value="computeForm- Definition and Test" />
-    <option name="LAST_COMMIT_MESSAGE" value="computeForm- Definition and Test" />
+    <MESSAGE value="isValid- Definition and Test" />
+    <option name="LAST_COMMIT_MESSAGE" value="isValid- Definition and Test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
