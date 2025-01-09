@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 // Add your documentation below:
 
@@ -238,36 +238,81 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public void load(String fileName) throws IOException {
-        // Add your code here
 
-        /////////////////////
+        // איפוס כל התאים לפני טעינת המידע מחדש
+        for (int i = 0; i < width(); i++) {
+            for (int j = 0; j < height(); j++) {
+                set(i, j, ""); // אפס את התאים עם ערך ריק או ברירת מחדל
+            }
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // פיצול השורה לפי פסיקים
+                    String[] parts = line.split(",");
+                    if (parts.length != 3) {
+                        throw new IOException("Invalid file format: each line must contain row,col,value.");
+                    }
+
+                    // פירוק השדות
+                    int row = Integer.parseInt(parts[0]); // אינדקס שורה
+                    int col = Integer.parseInt(parts[1]); // אינדקס עמודה
+                    String value = parts[2];             // הערך של התא
+
+                    // בדיקת תקינות הקואורדינטות
+                    if (!isIn(row, col)) {
+                        throw new IndexOutOfBoundsException("Cell coordinates out of bounds in file: " + row + "," + col);
+                    }
+
+                    // עדכון התא בגיליון
+                    set(row, col, value);
+                }
+            }
+
     }
 
     @Override
     public void save(String fileName) throws IOException {
-        // Add your code here
 
-        /////////////////////
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (int row = 0; row < height(); row++) {
+                for (int col = 0; col < width(); col++) {
+                    Cell cell = get(row, col);
+
+                    if (cell != null && !cell.getData().isEmpty()) {
+                        // שמירת ה-value, שורת המערך, ועמודת המערך
+                        String line =  row + "," + col + "," + cell.getData();
+                        writer.write(line);
+                        writer.newLine(); // מעבר לשורה חדשה
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public String eval(int x, int y) {
         String ans = null;
-        if(get(x,y)!=null) {ans = get(x,y).toString();}
+        if(get(x,y)!=null) {
+            ans = get(x,y).toString();
+        }
         Cell cell = get(x, y);
         if (cell != null && cell.getType() == Ex2Utils.FORM) {
             try {
-                if (cell.getType()==Ex2Utils.ERR_FORM_FORMAT){
-                    cell.setData(Ex2Utils.ERR_FORM);
-                    return cell.toString();
-                }
-                else if (cell.getType()==Ex2Utils.ERR_CYCLE_FORM){
-                    cell.setData(Ex2Utils.ERR_CYCLE);
-                }
-                else {
+//                if (cell.getType()==Ex2Utils.ERR_FORM_FORMAT){
+//                    cell.setData(Ex2Utils.ERR_FORM);
+//                    return cell.toString();
+//                }
+//                else if (cell.getType()==Ex2Utils.ERR_CYCLE_FORM){
+//                    cell.setData(Ex2Utils.ERR_CYCLE);
+//                }
+//                else {
                     return String.valueOf(computeFormulaWithValues(cell.getData()));
-                }
-            } catch (Exception e) {
+//                }
+            }
+            catch (Exception e) {
+                cell.setType(Ex2Utils.ERR_FORM_FORMAT);
                 return Ex2Utils.ERR_FORM;
             }
         }

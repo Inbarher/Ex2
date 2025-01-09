@@ -85,6 +85,12 @@ public class SCell implements Cell {
     //@Override
     @Override
     public String toString() {
+        if (type == Ex2Utils.ERR_FORM_FORMAT && line.isEmpty() != true && line != null ) {
+            return Ex2Utils.ERR_FORM;
+        }
+        if (type == Ex2Utils.ERR_CYCLE_FORM&& line.isEmpty() != true && line != null) {
+            return Ex2Utils.ERR_CYCLE;
+        }
         return getData();
     }
 
@@ -94,10 +100,15 @@ public class SCell implements Cell {
         this.line = s;
         this.type = whatType(s);
         this.Order = getOrder();
+
+
     }
 
     @Override
     public String getData() {//מה שאני קולטת מהמתא
+        if (type == Ex2Utils.NUMBER) {
+            line = String.valueOf(Double.parseDouble(line));
+        }
         return line;
     }
 
