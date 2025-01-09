@@ -1,39 +1,85 @@
 
 // Add your documentation below:
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SCell implements Cell {
+
     private String line;
     private int type;
+    private int Order;
     // Add your code here
 
     public SCell(String s) {
-        line = s;
-        type = whatType(line);
-      //  setData(s);
+        setData(s);
     }
-    public int whatType(String line){
-        if (isText(line)){
+
+    public int whatType(String line) {
+        if (isText(line)) {
             type = Ex2Utils.TEXT;
-        }
-        else if (isNumber(line)){
+        } else if (isNumber(line)) {
             type = Ex2Utils.NUMBER;
-        }
-        else if (isForm(line)){
+        } else if (isForm(line)) {
             type = Ex2Utils.FORM;
-        }
-        else {
-            type = Ex2Utils.ERR;
+        } else {
+            type = Ex2Utils.ERR_FORM_FORMAT;
         }
         return type;
     }
 
-    @Override
-    public int getOrder() {
-        // Add your code here
+    CellEntry entry = new CellEntry();
 
-        return 0;
-        // ///////////////////
+    @Override
+    public int getOrder(String ord) {
+        Order = -2;
+
+        if (ord == null || ord.isEmpty()) {
+            Order = 0;
+        }
+        else if (isNumber(ord) || isText(ord)) {
+            Order = 0;
+        }
+        else if (isForm(ord)) {
+            List<String> dependentCells = findDependentCells(ord);
+            int minOrder = 0;
+            int maxOrder = 0;
+            for (String dependentCell : dependentCells) {
+                if (entry.isValid(dependentCell)) {
+                    // חישוב הסדר עבור כל תא תלוי
+                    int dependentOrder = getOrder(dependentCell);
+                    minOrder = Math.min(minOrder,dependentOrder);
+                    if(dependentOrder==-2){
+                        return Ex2Utils.ERR_CYCLE_FORM;
+                    }
+                    maxOrder = Math.max(maxOrder, dependentOrder);
+                } else {
+                    throw new IllegalArgumentException("Invalid dependent cell: " + dependentCell);
+                }
+            }
+            return maxOrder + 1;
+        }
+        return Order;
+
+        //אם הסטרינג של התא מכיל בתוכו תא אחר אז אז הסדר שווה לסדר של התא שבפנים ועוד 1
+        //אם הסטרינג של התא מכיל בתוכו כמה תאים אז ניקח את התא שהסדר שלו הוא המקסימלי מבינהם ונוסיף לו אחד
+
     }
+
+    private List<String> findDependentCells(String ord) {
+        List<String> dependentCells = new ArrayList<>();
+
+        // מפצלים את הסטרינג לפי "=" "+", "-", "*", "/", ")", "(" בלבד
+        String[] tokens = ord.split("[=+\\-*/)(]+");
+
+        for (String token : tokens) {
+            if (entry.isValid(token)) {
+                dependentCells.add(token);
+            }
+        }
+        return dependentCells;
+    }
+
 
     //@Override
     @Override
@@ -44,8 +90,9 @@ public class SCell implements Cell {
     @Override
     public void setData(String s) {
         // Add your code here
-        line = s;
-        type = whatType(line);
+        this.line = s;
+        this.type = whatType(s);
+        this.Order = getOrder(s);
     }
 
     @Override
@@ -55,22 +102,22 @@ public class SCell implements Cell {
 
     @Override
     public int getType() {
-        return this.type;
+        return type;
     }
 
     @Override
     public void setType(int t) {
-        type = t;
+        this.type = t;
     }
 
     @Override
     public void setOrder(int t) {
-        // Add your code here
+        this.Order = t;
 
     }
 
     public boolean isNumber(String text) {
-        boolean result = false;
+
         try{
             Double.parseDouble(text);
             return true;
@@ -122,7 +169,9 @@ public class SCell implements Cell {
         }
 
         //If text is a number then it is a formula
-        if (isNumber(form)) {
+        CellEntry entry = new CellEntry();
+
+        if (isNumber(form)||entry.isValid(form)) {
             return true;
         }
 

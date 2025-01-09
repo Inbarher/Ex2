@@ -24,25 +24,47 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public String value(int x, int y) {
-        String ans = Ex2Utils.EMPTY_CELL;
-        // Add your code here קליטת המחרוזת מהמשתמש מה שהוא מקליד
-
-        Cell c = get(x,y);
-        if(c!=null) {ans = c.toString();}
-
-        /////////////////////
-        return ans;
+        Cell c = get(x, y);
+        if (c != null) {
+            return c.getData();
+        }
+        return null;
     }
+
+//        String ans = Ex2Utils.EMPTY_CELL;
+//
+//        if(x >= 0 && x < 26 && y >=0 && y<100) {
+//            String ABC = String.join("", Ex2Utils.ABC);
+//            char xC = ABC.charAt(x);
+//            ans = xC +""+ y;
+//        }
+//        // Add your code here 0,1 => A0
+//
+//        Cell c = get(x,y);
+//        if(c!=null) {ans = c.toString();}
+//
+//        /////////////////////
+//        return ans;
+//    }
 
     @Override
     public Cell get(int x, int y) {
+        if (!isIn(x, y)) {
+            throw new IndexOutOfBoundsException("Cell coordinates are out of bounds.");
+        }
         return table[x][y];
     }
 
     @Override
     public Cell get(String cords) {
+      CellEntry entry = new CellEntry();
+        if (entry.isValid(cords)){
+            int x = entry.getX(cords);
+            int y = entry.getY(cords);
+            return get(x,y);
+        }
         Cell ans = null;
-        // Add your code hereA1==01
+        // Add your code here  A0=table[0][0]
 
         /////////////////////
         return ans;
@@ -58,15 +80,22 @@ public class Ex2Sheet implements Sheet {
     }
     @Override
     public void set(int x, int y, String s) {
+        if (!isIn(x,y)) {
+            throw new IndexOutOfBoundsException("Cell coordinates are out of the table's bounds.");
+        }
         Cell c = new SCell(s);
         table[x][y] = c;
-        // Add your code here התא שהמשתמש בוחר קליטת מהמשתמש
+
+
+        // Add your code here
 
         /////////////////////
     }
     @Override
     public void eval() {
         int[][] dd = depth();
+
+
         // Add your code here
 
         // ///////////////////
@@ -74,8 +103,7 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public boolean isIn(int xx, int yy) {
-        boolean ans = xx>=0 && yy>=0;
-        // Add your code here A-I //1-16
+        boolean ans = xx >= 0 && xx < width() && yy >= 0 && yy < height();
 
         /////////////////////
         return ans;
@@ -84,11 +112,73 @@ public class Ex2Sheet implements Sheet {
     @Override
     public int[][] depth() {
         int[][] ans = new int[width()][height()];
-        // Add your code here
+        int depth = 0, count = 0, max = width() * height();
+        boolean flagC = true;
 
-        // ///////////////////
+        // אתחול המטריצה לערכי -1
+        for (int i = 0; i < width(); i++) {
+            for (int j = 0; j < height(); j++) {
+                ans[i][j] = -1;
+            }
+        }
+
+        // לולאה ראשית לחישוב עומקי התאים
+        while (count < max && flagC) {
+            flagC = false;
+
+            for (int x = 0; x < width(); x++) {
+                for (int y = 0; y < height(); y++) {
+                    if (canBeComputedNow(x, y, ans)) { // בדיקה אם ניתן לחשב תא זה
+                        ans[x][y] = depth;
+                        count++;
+                        flagC = true;
+                    }
+                }
+            }
+
+            depth++;
+        }
+
         return ans;
     }
+
+
+    //  פונקציה הבודקת אם ניתן לחשב את התא בהתחשב בתלות בתאים אחרים
+
+    private boolean canBeComputedNow(int x, int y, int[][] ans) {
+        if (!isIn(x, y)) {
+            return false;  // Ensure the cell exists within bounds
+        }
+        Cell cell = get(x, y);
+        if (cell == null || cell.getType() != Ex2Utils.FORM) {
+            return true;
+        }
+
+        String formula = cell.getData();
+        // Future: Extract dependencies here and validate their computation
+        return true;
+    }
+   // Other methods remain unchanged...
+
+//    private boolean canBeComputedNow(int x, int y, int[][] ans) {
+//        Cell cell = get(x, y);
+//        if (cell == null || cell.getType() != Ex2Utils.FORM) {
+//            return true; // תא שאינו נוסחה ניתן לחשב מיד
+//        }
+//
+//        // קבלת רשימת התאים עליהם תלוי התא הנוכחי
+//        String formula = cell.getData();
+//        List<Cell> dependencies = Ex2Utils.extractDependencies(formula, this);
+//
+//        for (Cell dep : dependencies) {
+//            int depX = dep.getX(), depY = dep.getY();
+//            if (!isIn(depX, depY) || ans[depX][depY] == -1) {
+//                return false; // לא ניתן לחשב אם אחד התאים עליהם תלוי התא טרם חושב
+//            }
+//        }
+
+//        return true;
+//    }
 
     @Override
     public void load(String fileName) throws IOException {
@@ -116,7 +206,7 @@ public class Ex2Sheet implements Sheet {
                 return Ex2Utils.ERR_FORM;
             }
         }
-        // Add your code hereחישוב ערך התא מחזיר מספר
+        // Add your code here
         /////////////////////
         return ans;
         }
@@ -129,6 +219,7 @@ public class Ex2Sheet implements Sheet {
         if (form.startsWith("=")) {
             form = form.substring(1).trim();
         }
+
 
         // Handle the case where the first character is '-' or '+'
         if (form.startsWith("+")) {

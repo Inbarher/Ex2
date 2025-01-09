@@ -1,9 +1,28 @@
 // Add your documentation below:
 
 public class CellEntry  implements Index2D {
+    private String cords;
+    private int x;
+    private int y;
+
+    public CellEntry(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.cords = getCords(x,y);
+    }
+
+    public String toString() {
+        return this.cords;
+    }
+
+    public CellEntry() {
+        this.cords = "";
+    }
+
 
     @Override
     public boolean isValid(String s) {
+        this.cords = s;
         if (s == null || s.isEmpty()) {
             return false;
         }
@@ -18,7 +37,7 @@ public class CellEntry  implements Index2D {
             c = Character.toUpperCase(c);
         }
         //If the first char is not in ABC.
-        if (ABC.indexOf(c)==-1){
+        if (ABC.indexOf(c) == -1) {
             return false;
         }
         //Check that the rest of the string is int.
@@ -42,7 +61,7 @@ public class CellEntry  implements Index2D {
             }
             String ABC = String.join("", Ex2Utils.ABC);
             //Convert from A-Z to index
-            int x = ABC.indexOf(c);
+            x = ABC.indexOf(c);
 
             return x;
         }
@@ -51,10 +70,24 @@ public class CellEntry  implements Index2D {
 
     @Override
     public int getY(String A0) {
+
         if (isValid(A0)) {
-            int y = Integer.parseInt(A0.substring(1));
+            y = Integer.parseInt(A0.substring(1));
             return y;
         }
         return Ex2Utils.ERR;
+    }
+
+    public String getCords (int x, int y) {
+    String ans = "";
+        if(x >= 0 && x < 26 && y >=0 && y<100) {
+            String ABC = String.join("", Ex2Utils.ABC);
+            char xC = ABC.charAt(x);
+            ans = xC +""+ y;
         }
+    return ans;
+
+    }
+
+
 }

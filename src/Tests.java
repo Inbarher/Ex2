@@ -1,13 +1,13 @@
-import org.junit.Assert.*;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+    import org.junit.Assert.*;
+    import org.junit.jupiter.api.Test;
+    import static org.junit.jupiter.api.Assertions.*;
+    import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Tests {
 
     @Test
     void testisText() {
-        SCell sCell = new SCell("1");
+        SCell sCell = new SCell("");
         assertEquals(false, sCell.isText("1"));
         assertEquals(false, sCell.isText("=1"));
         assertEquals(true, sCell.isText("fh"));
@@ -48,6 +48,12 @@ public class Tests {
         assertEquals(true, sCell.isForm("=+(4*2+4+5)+(-5+5)"));
         assertEquals(false, sCell.isForm("=*(4)"));
         assertEquals(false, sCell.isForm("=*(4*2-(+5))+(-5)"));
+        assertEquals(true, sCell.isForm("=A1*(3-A2)"));
+        assertEquals(true, sCell.isForm("=A1*(3-d2)"));
+        assertEquals(false, sCell.isForm("=A1*(3-d211)"));
+        assertEquals(false, sCell.isForm("=1A*(3-d2)"));
+
+
     }
 
     @Test
@@ -78,6 +84,8 @@ public class Tests {
        assertEquals(10.0, ex2Sheet.computeForm("=2*(3+3)-2"));
        assertEquals(-14.0, ex2Sheet.computeForm("=-(6-4)*7"));
        assertEquals(24.0, ex2Sheet.computeForm("=4*(2+2+2)"));
+       assertEquals(24.0, ex2Sheet.computeForm("=24"));
+
     }
 
     @Test
@@ -123,5 +131,17 @@ public class Tests {
         assertEquals(4, cellEntry.getY("d4"));
         assertEquals(1, cellEntry.getY("a1"));
         assertEquals(99, cellEntry.getY("j99"));
+    }
+
+    @Test
+    void testGet(){
+        Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
+       // assertEquals([0][0], ex2Sheet.get("A0"));
+    }
+
+    @Test
+    void testValue(){ //TA2
+//        Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
+//        assertEquals("A0", ex2Sheet.get(0,0));
     }
 }
