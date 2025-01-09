@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.List;
 // Add your documentation below:
 
 public class Ex2Sheet implements Sheet {
@@ -21,12 +22,12 @@ public class Ex2Sheet implements Sheet {
     public Ex2Sheet() {
         this(Ex2Utils.WIDTH, Ex2Utils.HEIGHT);
     }
-
+    //הערך שצריך להיות מוצג בתא. אם זה נוסחה אז החישוב הסופי
     @Override
     public String value(int x, int y) {
         Cell c = get(x, y);
         if (c != null) {
-            return c.getData();
+            return eval(x,y);
         }
         return null;
     }
@@ -86,7 +87,6 @@ public class Ex2Sheet implements Sheet {
         Cell c = new SCell(s);
         table[x][y] = c;
 
-
         // Add your code here
 
         /////////////////////
@@ -95,6 +95,60 @@ public class Ex2Sheet implements Sheet {
     public void eval() {
         int[][] dd = depth();
 
+        int maxDepth = 0;
+        for (int i = 0; i < width(); i++) {
+            for (int j = 0; j < height(); j++) {
+//                if (get(i,j).getType() == Ex2Utils.ERR_CYCLE_FORM || get(i,j).getType() == Ex2Utils.ERR_FORM_FORMAT) {
+//                    get(i,j).setType(Ex2Utils.FORM);
+//                }
+                if (dd [i][j] > maxDepth) {
+                    maxDepth = dd[i][j];
+                }
+            }
+        }
+        values = new Double[width()][height()];
+
+        for (int i = 0; i < maxDepth; i++) {
+            for (int j = 0; j < width(); j++) {
+                for (int k = 0; k < height(); k++) {
+                    if (dd[j][k]==0){
+                        String ans = null;
+                        Cell c = get(j,k);
+                        if (c != null){
+                            ans = c.toString();
+                        }
+                        int type = c.getType();
+                        if (type == Ex2Utils.NUMBER) {
+                            values [j][k] = Double.parseDouble(ans);
+                        }
+                        else if (type == Ex2Utils.FORM){
+                            try {
+                                values[j][k] = computeForm(ans);
+                            }
+                            catch (Exception e){
+                                try {
+                                    values[j][k] = computeFormWithDependencies(ans);
+                                }
+                                catch (Exception e1) {
+                                    c.setType(Ex2Utils.ERR_CYCLE_FORM);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        //int[][] dd = depth();
+        for (int i = 0; i < width(); i++) {
+            for (int j = 0; j < height(); j++) {
+                if(dd[i][j]==-1){
+                    if(get(i,j).toString().isEmpty())
+                        get(i,j).setType(Ex2Utils.ERR_CYCLE_FORM);
+                }
+            }
+        }
 
         // Add your code here
 
@@ -142,43 +196,45 @@ public class Ex2Sheet implements Sheet {
         return ans;
     }
 
+    public  Double computeFormWithDependencies(String formula) {
+        List<String> dependencies = new SCell("").findDependentCells(formula);
+        for (String dep : dependencies) {
+            int depX = new CellEntry().getX(dep);
+            int depY = new CellEntry().getY(dep);
+            if (depX >= 0 && depY >= 0 && isIn(depX, depY)) {
+                return values[depX][depY]; // השתמש בערך המחושב
+            }
+        }
+        return computeForm(formula);
+    }
+
 
     //  פונקציה הבודקת אם ניתן לחשב את התא בהתחשב בתלות בתאים אחרים
 
     private boolean canBeComputedNow(int x, int y, int[][] ans) {
-        if (!isIn(x, y)) {
-            return false;  // Ensure the cell exists within bounds
-        }
+
         Cell cell = get(x, y);
+
         if (cell == null || cell.getType() != Ex2Utils.FORM) {
-            return true;
+            return true; // תא שאינו נוסחה ניתן לחשב מיד
         }
 
+        // קבלת רשימת התאים עליהם תלוי התא הנוכחי
         String formula = cell.getData();
-        // Future: Extract dependencies here and validate their computation
+        SCell tempCell = new SCell(formula);
+        List<String> dependencies = tempCell.findDependentCells(formula);
+
+        CellEntry entry = new CellEntry();
+        for (String dep : dependencies) {
+            int depX = entry.getX(dep), depY = entry.getY(dep);
+
+            if (!isIn(depX, depY) || ans[depX][depY] == -1) {
+                return false; // לא ניתן לחשב אם אחד התאים עליהם תלוי התא טרם חושב
+            }
+        }
+
         return true;
     }
-   // Other methods remain unchanged...
-
-//    private boolean canBeComputedNow(int x, int y, int[][] ans) {
-//        Cell cell = get(x, y);
-//        if (cell == null || cell.getType() != Ex2Utils.FORM) {
-//            return true; // תא שאינו נוסחה ניתן לחשב מיד
-//        }
-//
-//        // קבלת רשימת התאים עליהם תלוי התא הנוכחי
-//        String formula = cell.getData();
-//        List<Cell> dependencies = Ex2Utils.extractDependencies(formula, this);
-//
-//        for (Cell dep : dependencies) {
-//            int depX = dep.getX(), depY = dep.getY();
-//            if (!isIn(depX, depY) || ans[depX][depY] == -1) {
-//                return false; // לא ניתן לחשב אם אחד התאים עליהם תלוי התא טרם חושב
-//            }
-//        }
-
-//        return true;
-//    }
 
     @Override
     public void load(String fileName) throws IOException {
@@ -201,7 +257,16 @@ public class Ex2Sheet implements Sheet {
         Cell cell = get(x, y);
         if (cell != null && cell.getType() == Ex2Utils.FORM) {
             try {
-                return String.valueOf(computeForm(cell.getData()));
+                if (cell.getType()==Ex2Utils.ERR_FORM_FORMAT){
+                    cell.setData(Ex2Utils.ERR_FORM);
+                    return cell.toString();
+                }
+                else if (cell.getType()==Ex2Utils.ERR_CYCLE_FORM){
+                    cell.setData(Ex2Utils.ERR_FORM);
+                }
+                else {
+                    return String.valueOf(computeForm(cell.getData()));
+                }
             } catch (Exception e) {
                 return Ex2Utils.ERR_FORM;
             }
@@ -212,9 +277,24 @@ public class Ex2Sheet implements Sheet {
         }
 
 
+    public String beforeComputeForm(Cell cords, Sheet sheet) {
+        String ans = cords.getData();
+        if (cords.getType() == Ex2Utils.FORM) {//אם אתה מצליח לחשב מצויין. אם לא אז תציב במקום A1 את A1
 
+
+            try {
+                return String.valueOf(computeForm(cords.getData()));
+            } catch (Exception e) {
+                return Ex2Utils.ERR_FORM;
+            }
+        }
+        return cords.getData();
+    }
 
     public Double computeForm(String form) {
+
+        //computeFormWithDependencies(form);
+
         // In order to calculate, remove the char '='.
         if (form.startsWith("=")) {
             form = form.substring(1).trim();

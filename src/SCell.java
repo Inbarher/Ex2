@@ -31,9 +31,9 @@ public class SCell implements Cell {
     CellEntry entry = new CellEntry();
 
     @Override
-    public int getOrder(String ord) {
+    public int getOrder() {
         Order = -2;
-
+        String ord = getData();
         if (ord == null || ord.isEmpty()) {
             Order = 0;
         }
@@ -46,9 +46,10 @@ public class SCell implements Cell {
             int maxOrder = 0;
             for (String dependentCell : dependentCells) {
                 if (entry.isValid(dependentCell)) {
+                    Cell c = new SCell(dependentCell);
                     // חישוב הסדר עבור כל תא תלוי
-                    int dependentOrder = getOrder(dependentCell);
-                    minOrder = Math.min(minOrder,dependentOrder);
+                    int dependentOrder = c.getOrder();
+
                     if(dependentOrder==-2){
                         return Ex2Utils.ERR_CYCLE_FORM;
                     }
@@ -66,12 +67,12 @@ public class SCell implements Cell {
 
     }
 
-    private List<String> findDependentCells(String ord) {
+    public List<String> findDependentCells(String ord) {
         List<String> dependentCells = new ArrayList<>();
 
         // מפצלים את הסטרינג לפי "=" "+", "-", "*", "/", ")", "(" בלבד
         String[] tokens = ord.split("[=+\\-*/)(]+");
-
+        CellEntry entry = new CellEntry();
         for (String token : tokens) {
             if (entry.isValid(token)) {
                 dependentCells.add(token);
@@ -92,7 +93,7 @@ public class SCell implements Cell {
         // Add your code here
         this.line = s;
         this.type = whatType(s);
-        this.Order = getOrder(s);
+        this.Order = getOrder();
     }
 
     @Override
@@ -210,6 +211,18 @@ public class SCell implements Cell {
 
         //Otherwise it is not a formula.
         return false;
+    }
+    public static void main(String[] args) {
+        SCell A1 = new SCell("=1+2");
+        SCell A2 = new SCell("=A1+2");
+        SCell A3 = new SCell("=A1+A2+A3");
+        SCell A4 = new SCell("1");
+        A1.setData("=1");
+
+        System.out.println("type A1:" + A1.getType() + " type A2:" + A2.getType() + " type A3:" + A3.getType()+" type A4:"+A4.getType() );
+        System.out.println("order A1 "+A1.getOrder()+" order A2 "+A2.getOrder() +" order A3 "+A3.getOrder()+" order A4 "+A4.getOrder() );
+        System.out.println("A1:" + A1 + " A2:" + A2 + " A3:" + A3 + " A4:" + A4 );
+        //System.out.println(s.findDependentCells(s.toString()));
     }
 
 }
