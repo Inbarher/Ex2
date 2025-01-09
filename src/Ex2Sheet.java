@@ -262,10 +262,10 @@ public class Ex2Sheet implements Sheet {
                     return cell.toString();
                 }
                 else if (cell.getType()==Ex2Utils.ERR_CYCLE_FORM){
-                    cell.setData(Ex2Utils.ERR_FORM);
+                    cell.setData(Ex2Utils.ERR_CYCLE);
                 }
                 else {
-                    return String.valueOf(computeForm(cell.getData()));
+                    return String.valueOf(computeFormulaWithValues(cell.getData()));
                 }
             } catch (Exception e) {
                 return Ex2Utils.ERR_FORM;
@@ -277,23 +277,7 @@ public class Ex2Sheet implements Sheet {
         }
 
 
-    public String beforeComputeForm(Cell cords, Sheet sheet) {
-        String ans = cords.getData();
-        if (cords.getType() == Ex2Utils.FORM) {//אם אתה מצליח לחשב מצויין. אם לא אז תציב במקום A1 את A1
-
-
-            try {
-                return String.valueOf(computeForm(cords.getData()));
-            } catch (Exception e) {
-                return Ex2Utils.ERR_FORM;
-            }
-        }
-        return cords.getData();
-    }
-
     public Double computeForm(String form) {
-
-        //computeFormWithDependencies(form);
 
         // In order to calculate, remove the char '='.
         if (form.startsWith("=")) {
@@ -392,6 +376,45 @@ public class Ex2Sheet implements Sheet {
 
         //Otherwise the expression is a number
         return Double.parseDouble(form);
+    }
+
+    public String computeFormulaWithValues(String formula) {
+        if (!formula.startsWith("=")) {
+            return formula; // אם לא נוסחה, פשוט להחזיר את התוכן המקורי
+        }
+
+        // הסרת הסימן '=' מהנוסחה
+        formula = formula.substring(1).trim();
+
+        // זיהוי התאים התלויים בנוסחה
+        SCell tempCell = new SCell(formula);
+        List<String> dependencies = tempCell.findDependentCells(formula);
+
+        // החלפת כל שם תא בערך שלו
+        for (String dep : dependencies) {
+            CellEntry entry = new CellEntry();
+            int depX = entry.getX(dep);
+            int depY = entry.getY(dep);
+
+            if (isIn(depX, depY)) {
+                Cell dependentCell = get(depX, depY);
+                String value = value(depX, depY); // קבלת הערך של התא התלוי
+                if (value == null || value.isEmpty()) {
+                    value = ""; // ברירת מחדל אם התא ריק
+                }
+                formula = formula.replace(dep, value);
+            } else {
+                throw new IllegalArgumentException("Dependent cell out of bounds: " + dep);
+            }
+        }
+
+        // חישוב הערך של הנוסחה לאחר ההחלפה
+        try {
+            Double result = computeForm(formula);
+            return result.toString();
+        } catch (Exception e) {
+            return Ex2Utils.ERR_FORM;
+        }
     }
 
 }
