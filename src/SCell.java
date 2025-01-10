@@ -14,6 +14,10 @@ public class SCell implements Cell {
     public SCell(String s) {
         setData(s);
     }
+    public SCell() {
+        setData("");
+    }
+
 
     public int whatType(String line) {
         if (isText(line)) {
@@ -22,10 +26,13 @@ public class SCell implements Cell {
             type = Ex2Utils.NUMBER;
         } else if (isForm(line)) {
             type = Ex2Utils.FORM;
+        } else if (line == Ex2Utils.ERR_CYCLE) {
+            type = Ex2Utils.ERR_CYCLE_FORM;
         } else {
             type = Ex2Utils.ERR_FORM_FORMAT;
         }
         return type;
+
     }
 
     CellEntry entry = new CellEntry();
@@ -88,7 +95,7 @@ public class SCell implements Cell {
         if (type == Ex2Utils.ERR_FORM_FORMAT && line.isEmpty() != true && line != null ) {
             return Ex2Utils.ERR_FORM;
         }
-        if (type == Ex2Utils.ERR_CYCLE_FORM&& line.isEmpty() != true && line != null) {
+        if (type == Ex2Utils.ERR_CYCLE_FORM && line.isEmpty() != true && line != null) {
             return Ex2Utils.ERR_CYCLE;
         }
         return getData();

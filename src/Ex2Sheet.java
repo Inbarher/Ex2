@@ -98,9 +98,6 @@ public class Ex2Sheet implements Sheet {
         int maxDepth = 0;
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
-//                if (get(i,j).getType() == Ex2Utils.ERR_CYCLE_FORM || get(i,j).getType() == Ex2Utils.ERR_FORM_FORMAT) {
-//                    get(i,j).setType(Ex2Utils.FORM);
-//                }
                 if (dd [i][j] > maxDepth) {
                     maxDepth = dd[i][j];
                 }
@@ -117,21 +114,15 @@ public class Ex2Sheet implements Sheet {
                         if (c != null){
                             ans = c.toString();
                         }
-                        int type = c.getType();
-                        if (type == Ex2Utils.NUMBER) {
+                        if (c.getType() == Ex2Utils.NUMBER) {
                             values [j][k] = Double.parseDouble(ans);
                         }
-                        else if (type == Ex2Utils.FORM){
+                        else if (c.getType() == Ex2Utils.FORM){
                             try {
-                                values[j][k] = computeForm(ans);
+                                values[j][k] = computeFormWithDependencies(ans);
                             }
                             catch (Exception e){
-                                try {
-                                    values[j][k] = computeFormWithDependencies(ans);
-                                }
-                                catch (Exception e1) {
-                                    c.setType(Ex2Utils.ERR_CYCLE_FORM);
-                                }
+                                    c.setData(Ex2Utils.ERR_CYCLE);
                             }
                         }
 
@@ -140,19 +131,14 @@ public class Ex2Sheet implements Sheet {
             }
         }
 
-        //int[][] dd = depth();
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
                 if(dd[i][j]==-1){
                     if(get(i,j).toString().isEmpty())
-                        get(i,j).setType(Ex2Utils.ERR_CYCLE_FORM);
+                        get(i,j).setData(Ex2Utils.ERR_CYCLE);
                 }
             }
         }
-
-        // Add your code here
-
-        // ///////////////////
     }
 
     @Override
@@ -300,18 +286,18 @@ public class Ex2Sheet implements Sheet {
         Cell cell = get(x, y);
         if (cell != null && cell.getType() == Ex2Utils.FORM) {
             try {
-//                if (cell.getType()==Ex2Utils.ERR_FORM_FORMAT){
-//                    cell.setData(Ex2Utils.ERR_FORM);
-//                    return cell.toString();
-//                }
-//                else if (cell.getType()==Ex2Utils.ERR_CYCLE_FORM){
-//                    cell.setData(Ex2Utils.ERR_CYCLE);
-//                }
-//                else {
+                if (cell.getType()==Ex2Utils.ERR_FORM_FORMAT){
+                    return Ex2Utils.ERR_FORM;
+                }
+                else if (cell.getType()==Ex2Utils.ERR_CYCLE_FORM){
+                    return Ex2Utils.ERR_CYCLE;
+                }
+                else {
                     return String.valueOf(computeFormulaWithValues(cell.getData()));
-//                }
+                }
             }
             catch (Exception e) {
+
                 cell.setType(Ex2Utils.ERR_FORM_FORMAT);
                 return Ex2Utils.ERR_FORM;
             }
@@ -424,9 +410,9 @@ public class Ex2Sheet implements Sheet {
     }
 
     public String computeFormulaWithValues(String formula) {
-        if (!formula.startsWith("=")) {
-            return formula; // אם לא נוסחה, פשוט להחזיר את התוכן המקורי
-        }
+//        if (!formula.startsWith("=")) {
+//            return formula; // אם לא נוסחה, פשוט להחזיר את התוכן המקורי
+//        }
 
         // הסרת הסימן '=' מהנוסחה
         formula = formula.substring(1).trim();
@@ -442,7 +428,6 @@ public class Ex2Sheet implements Sheet {
             int depY = entry.getY(dep);
 
             if (isIn(depX, depY)) {
-                Cell dependentCell = get(depX, depY);
                 String value = value(depX, depY); // קבלת הערך של התא התלוי
                 if (value == null || value.isEmpty()) {
                     value = ""; // ברירת מחדל אם התא ריק
@@ -454,12 +439,9 @@ public class Ex2Sheet implements Sheet {
         }
 
         // חישוב הערך של הנוסחה לאחר ההחלפה
-        try {
-            Double result = computeForm(formula);
-            return result.toString();
-        } catch (Exception e) {
-            return Ex2Utils.ERR_FORM;
-        }
+
+        Double result = computeForm(formula);
+        return result.toString();
     }
 
 }

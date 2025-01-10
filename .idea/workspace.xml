@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="Partly running 1">
+    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="save &amp;&amp; loud">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Ex2Sheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex2Sheet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SCell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,9 +106,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SCell" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SCell" />
+    <configuration name="Tests.testComputeForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="Tests" />
+      <option name="METHOD_NAME" value="testComputeForm" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Tests.testGet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Ex2" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="Tests" />
+      <option name="METHOD_NAME" value="testGet" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -122,16 +136,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tests.testisForm" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Ex2" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testisForm" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Ex2Sol_v0.2.jar-obf.jar" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/src/Ex2Sol_v0.2.jar-obf.jar" />
       <method v="2" />
@@ -139,10 +143,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Ex2GUI" />
+        <item itemvalue="JUnit.Tests.testComputeForm" />
         <item itemvalue="JAR Application.Ex2Sol_v0.2.jar-obf.jar" />
-        <item itemvalue="Application.SCell" />
-        <item itemvalue="JUnit.Tests.testisForm" />
         <item itemvalue="JUnit.Tests.testValue" />
+        <item itemvalue="JUnit.Tests.testGet" />
       </list>
     </recent_temporary>
   </component>
@@ -168,7 +172,7 @@
       <workItem from="1736122660761" duration="3865000" />
       <workItem from="1736160868450" duration="18665000" />
       <workItem from="1736233048607" duration="17964000" />
-      <workItem from="1736317916238" duration="51465000" />
+      <workItem from="1736317916238" duration="56857000" />
     </task>
     <task id="LOCAL‎-00001" summary="Start">
       <option name="closed" value="true" />
@@ -290,7 +294,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1736449664068</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL‎-00016" summary="save &amp;&amp; loud">
+      <option name="closed" value="true" />
+      <created>1736462588584</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL‎-00016" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1736462588584</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -332,7 +344,8 @@
     <MESSAGE value="almost finish CellEntry + SCell" />
     <MESSAGE value="Partly running" />
     <MESSAGE value="Partly running 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Partly running 1" />
+    <MESSAGE value="save &amp;&amp; loud" />
+    <option name="LAST_COMMIT_MESSAGE" value="save &amp;&amp; loud" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

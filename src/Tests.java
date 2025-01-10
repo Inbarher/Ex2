@@ -86,6 +86,8 @@ public class Tests {
        assertEquals(24.0, ex2Sheet.computeForm("=4*(2+2+2)"));
        assertEquals(24.0, ex2Sheet.computeForm("=24"));
 
+
+
     }
 
     @Test
@@ -135,13 +137,19 @@ public class Tests {
 
     @Test
     void testGet(){
-        Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
-       // assertEquals([0][0], ex2Sheet.get("A0"));
+//        Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
+//      assertEquals(0, ex2Sheet.get("A0"));
     }
 
     @Test
     void testValue(){ //TA2
 //        Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
 //        assertEquals("A0", ex2Sheet.get(0,0));
+    }
+
+    @Test
+    void testcomputeFormulaWithValues(){
+        Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
+
     }
 }
