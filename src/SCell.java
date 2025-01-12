@@ -15,22 +15,33 @@ public class SCell implements Cell {
         setData(s);
     }
     public SCell() {
-        setData("");
+        setData(null);
     }
 
 
     public int whatType(String line) {
-        if (isText(line)) {
-            type = Ex2Utils.TEXT;
-        } else if (isNumber(line)) {
-            type = Ex2Utils.NUMBER;
-        } else if (isForm(line)) {
-            type = Ex2Utils.FORM;
-        } else if (line == Ex2Utils.ERR_CYCLE) {
+        if (line == Ex2Utils.ERR_CYCLE){
             type = Ex2Utils.ERR_CYCLE_FORM;
-        } else {
+        }
+        else if (line == Ex2Utils.ERR_FORM){
             type = Ex2Utils.ERR_FORM_FORMAT;
         }
+        else if (isText(line)) {
+            type = Ex2Utils.TEXT;
+        }
+        else if (isNumber(line)) {
+            type = Ex2Utils.NUMBER;
+        }
+        else if (isForm(line)) {
+            type = Ex2Utils.FORM;
+        }
+        else if (line == Ex2Utils.ERR_CYCLE) {
+            type = Ex2Utils.ERR_CYCLE_FORM;
+        }
+        else {
+            type = Ex2Utils.ERR_FORM_FORMAT;
+        }
+
         return type;
 
     }
@@ -48,7 +59,7 @@ public class SCell implements Cell {
             Order = 0;
         }
         else if (isForm(ord)) {
-            List<String> dependentCells = findDependentCells(ord);
+            List<String> dependentCells = new Ex2Sheet().findDependentCells(ord);
             int minOrder = 0;
             int maxOrder = 0;
             for (String dependentCell : dependentCells) {
@@ -74,30 +85,14 @@ public class SCell implements Cell {
 
     }
 
-    public List<String> findDependentCells(String ord) {
-        List<String> dependentCells = new ArrayList<>();
-
-        // מפצלים את הסטרינג לפי "=" "+", "-", "*", "/", ")", "(" בלבד
-        String[] tokens = ord.split("[=+\\-*/)(]+");
-        CellEntry entry = new CellEntry();
-        for (String token : tokens) {
-            if (entry.isValid(token)) {
-                dependentCells.add(token);
-            }
-        }
-        return dependentCells;
-    }
-
-
-    //@Override
     @Override
     public String toString() {
-        if (type == Ex2Utils.ERR_FORM_FORMAT && line.isEmpty() != true && line != null ) {
-            return Ex2Utils.ERR_FORM;
-        }
-        if (type == Ex2Utils.ERR_CYCLE_FORM && line.isEmpty() != true && line != null) {
-            return Ex2Utils.ERR_CYCLE;
-        }
+//        if (type == Ex2Utils.ERR_FORM_FORMAT && line.isEmpty() == false ) {
+//            return Ex2Utils.ERR_FORM;
+//        }
+//        if (type == Ex2Utils.ERR_CYCLE_FORM && line.isEmpty() == false) {
+//            return Ex2Utils.ERR_CYCLE;
+//        }
         return getData();
     }
 
@@ -136,6 +131,9 @@ public class SCell implements Cell {
     }
 
     public boolean isNumber(String text) {
+        if (text == null || text.isEmpty()) {
+            return false;
+        }
 
         try{
             Double.parseDouble(text);
