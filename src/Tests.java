@@ -295,4 +295,138 @@ public class Tests {
         Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
 
     }
+
+    @Test
+    public void testDepth_EmptyTable() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3); // טבלה ריקה 3x3
+
+        int[][] result = sheet.depth();
+        int[][] expected = {
+                {0, 0, 0},
+                {0, 0, 0},
+                {0, 0, 0}
+        };
+
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void testDepth_SimpleDependencies() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        SCell sCell = new SCell("");
+        // הגדרת תאים עם תלות פשוטה
+        sheet.set(0, 0, "1");  //  A0
+        sheet.set(0, 1, "=A0+2"); // A1
+        sheet.set(0, 2, "=A1+3"); // A2
+
+        int[][] result = sheet.depth();
+        int[][] expected = {
+                {0, 0, 0},
+                {0, 0, 0},
+                {0, 0, 0}
+        };
+
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void testDepth_ComplexDependencies() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+
+        // הגדרת תאים עם תלות מורכבת
+        sheet.set(0, 0, "=1+1");   // A0
+        sheet.set(0, 1, "=A0+2");  // A1
+        sheet.set(1, 0, "=A1+3");  // B1
+        sheet.set(1, 1, "=A0+B0"); // B2
+
+        int[][] result = sheet.depth();
+        int[][] expected = {
+                {0, 0, 0},
+                {0, 0, 0},
+                {0, 0, 0}
+        };
+
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void testDepth_Cycle() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+
+        // הגדרת תאים שיוצרים מעגל
+        sheet.set(0, 0, "=B0+1"); // A0
+        sheet.set(1, 0, "=A0+1"); // B0
+
+        int[][] result = sheet.depth();
+        int[][] expected = {
+                {-1, 1, 1},
+                {-1, 1, 1},
+                {1, 1, 1}
+        };
+
+        assertArrayEquals(expected, result, "Cycle detection failed");
+    }
+
+    @Test
+    void testValueForNumberCell() {
+        Ex2Sheet sheet = new Ex2Sheet(5, 5);
+        sheet.set(2, 3, "42");
+        assertEquals("42.0", sheet.value(2, 3), "Number printed as double.");
+    }
+
+    @Test
+    void testValueForTextCell() {
+        Ex2Sheet sheet = new Ex2Sheet(5, 5);
+        sheet.set(1, 1, "Hello");
+        assertEquals("Hello", sheet.value(1, 1), "The value of a text cell should match its content.");
+    }
+
+    @Test
+    void testValueForFormulaCell() {
+        Ex2Sheet sheet = new Ex2Sheet(5, 5);
+        sheet.set(0, 0, "5");
+        sheet.set(0, 1, "10");
+        sheet.set(0, 2, "=A0+A1");
+        assertEquals("15.0", sheet.value(0, 2), "The value of a formula cell should be the calculated result.");
+    }
+
+    @Test
+    void testValueForEmptyCell() {
+        Ex2Sheet sheet = new Ex2Sheet(5, 5);
+        assertEquals("",sheet.value(0, 0), "The value of an empty cell should be empty");
+    }
+
+    @Test
+    void testValueForInvalidFormula() {
+        Ex2Sheet sheet = new Ex2Sheet(5, 5);
+        sheet.set(0, 0, "=A1+B2"); // Invalid because A1 and B2 are undefined
+        assertEquals(Ex2Utils.ERR_FORM, sheet.value(0, 0), "An invalid formula should return an error string.");
+    }
+
+
+    @Test
+    void testValueForCyclicDependency() {
+        Ex2Sheet sheet = new Ex2Sheet(5, 5);
+        sheet.set(0, 0, "=A0");
+        sheet.set(0, 1, "=A1");
+        sheet.eval();
+        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 0), "A cyclic dependency should return a cycle error.");
+        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 1), "A cyclic dependency should return a cycle error.");
+    }
+
+
+    @Test
+    void testMoreValueForCyclicDependency() {
+        Ex2Sheet sheet = new Ex2Sheet(5, 5);
+        sheet.set(0, 0, "=A2");
+        sheet.set(0, 1, "=A0");
+        sheet.set(0, 2, "=A1");
+        sheet.eval();
+        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 0), "A cyclic dependency should return a cycle error.");
+        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 1), "A cyclic dependency should return a cycle error.");
+        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 2), "A cyclic dependency should return a cycle error.");
+    }
+
 }
+
+

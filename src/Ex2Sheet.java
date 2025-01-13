@@ -28,18 +28,6 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String value(int x, int y) {
         Cell c = get(x, y);
-//        List<String> dependencies = findDependentCells(c.getData());
-//        for (String dep : dependencies) {
-//            int depX = new CellEntry().getX(dep);
-//            int depY = new CellEntry().getY(dep);
-//            if (get(depX, depY).getData().equals("")) {
-//                c.setType(Ex2Utils.ERR_FORM_FORMAT);
-//                return Ex2Utils.ERR_FORM;
-//            }
-//        }
-       // markCyclicErrorCycle(x, y);
-        //markCyclicError (x, y);
-
         if (c != null) {
             return eval(x,y);
         }
@@ -115,17 +103,7 @@ public class Ex2Sheet implements Sheet {
                                 values[j][k] = computeFormWithDependencies(ans);
                             }
                             catch (Exception e){
-                                   // c.setData(Ex2Utils.ERR_CYCLE);
-//                                c.setType(Ex2Utils.ERR_CYCLE_FORM);
-//                                List<String> dependencies = findDependentCells(ans);
-//                                for (String dep : dependencies) {
-//                                    int depX = new CellEntry().getX(dep);
-//                                    int depY = new CellEntry().getY(dep);
-//                                    //if (isIn(depX, depY))
-//                                        get(depX,depY).setType(Ex2Utils.ERR_CYCLE_FORM);
-//                                }
-
-                                    //values[j][k] = null;
+                                    c.setData(Ex2Utils.ERR_CYCLE);
 
                             }
                         }
@@ -138,76 +116,23 @@ public class Ex2Sheet implements Sheet {
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
                 if(dd[i][j]==-1){
-                    if(get(i,j).toString().isEmpty()) {
-                        //  get(i,j).setData(Ex2Utils.ERR_CYCLE);
-
-                        get(i,j).setType(Ex2Utils.ERR_CYCLE_FORM);
-//                        List<String> dependencies = findDependentCells(get(i,j).getData());
-//                        for (String dep : dependencies) {
-//                            int depX = new CellEntry().getX(dep);
-//                            int depY = new CellEntry().getY(dep);
-//
-//                                get(depX,depY).setType(Ex2Utils.ERR_CYCLE_FORM);
-//                        }
-                        //markCyclicErrorCycle(i,j);
-                       // markCyclicError (i,j);
+                    if(!get(i,j).toString().isEmpty()) {
+                         get(i,j).setType(Ex2Utils.ERR_CYCLE_FORM);
                     }
                 }
             }
         }
     }
-
-    private void markCyclicErrorCycle(int x, int y) {
-        Cell cell = get(x, y);
-        if (cell == null || cell.getType() != Ex2Utils.ERR_CYCLE_FORM) {
-            return; // Exit if the cell is not marked with a cyclic error
-        }
-
-        // Find dependent cells
-        List<String> dependencies = findDependentCells(cell.getData());
+    public Double computeFormWithDependencies(String formula) {
+        List<String> dependencies = findDependentCells(formula);
         for (String dep : dependencies) {
-            CellEntry entry = new CellEntry();
-            int depX = entry.getX(dep);
-            int depY = entry.getY(dep);
-
-            // Check if the dependent cell is within bounds
-            if (isIn(depX, depY)) {
-                Cell dependentCell = get(depX, depY);
-
-                // Mark the dependent cell with a cyclic error if not already marked
-                if (dependentCell != null && dependentCell.getType() != Ex2Utils.ERR_CYCLE_FORM) {
-                    dependentCell.setType(Ex2Utils.ERR_CYCLE_FORM);
-                    //markCyclicErrorCycle(depX, depY); // Recursively mark all dependent cells
-                }
+            int depX = new CellEntry().getX(dep);
+            int depY = new CellEntry().getY(dep);
+            if (depX >= 0 && depY >= 0 && isIn(depX, depY)) {
+                return values[depX][depY]; // Use the calculated value
             }
         }
-    }
-
-    private void markCyclicError(int x, int y) {
-        Cell cell = get(x, y);
-
-        if (cell == null || Objects.equals(cell.getData(), "") || cell.getType() != Ex2Utils.ERR_FORM_FORMAT) {
-            return;
-        }
-
-        // Find dependent cells
-        List<String> dependencies = findDependentCells(cell.getData());
-        for (String dep : dependencies) {
-            CellEntry entry = new CellEntry();
-            int depX = entry.getX(dep);
-            int depY = entry.getY(dep);
-
-            // Check if the dependent cell is within bounds
-            if (isIn(depX, depY)) {
-                Cell dependentCell = get(depX, depY);
-
-                // Mark the dependent cell with a cyclic error if not already marked
-                if (dependentCell.getType() == Ex2Utils.ERR_CYCLE_FORM) {
-                    cell.setType(Ex2Utils.ERR_CYCLE_FORM);
-                   // markCyclicErrorCycle(depX, depY); // Recursively mark all dependent cells
-                }
-            }
-        }
+        return computeForm(formula);
     }
 
     @Override
@@ -220,8 +145,6 @@ public class Ex2Sheet implements Sheet {
     @Override
     public int[][] depth() {
         int[][] ans = new int[width()][height()];
-        int depth = 0, count = 0, max = width() * height();
-        boolean flagC = true;
 
         // Initialize the matrix to values of -1
         for (int i = 0; i < width(); i++) {
@@ -229,6 +152,8 @@ public class Ex2Sheet implements Sheet {
                 ans[i][j] = -1;
             }
         }
+        int depth = 0, count = 0, max = width() * height();
+        boolean flagC = true;
 
         // Main loop for calculating cell depths
         while (count < max && flagC) {
@@ -242,24 +167,12 @@ public class Ex2Sheet implements Sheet {
                         flagC = true;
                     }
                 }
-            }
 
+            }
             depth++;
         }
 
         return ans;
-    }
-
-    public Double computeFormWithDependencies(String formula) {
-        List<String> dependencies = findDependentCells(formula);
-        for (String dep : dependencies) {
-            int depX = new CellEntry().getX(dep);
-            int depY = new CellEntry().getY(dep);
-            if (depX >= 0 && depY >= 0 && isIn(depX, depY)) {
-                return values[depX][depY]; // Use the calculated value
-            }
-        }
-        return computeForm(formula);
     }
 
 
@@ -267,19 +180,17 @@ public class Ex2Sheet implements Sheet {
     private boolean canBeComputedNow(int x, int y, int[][] ans) {
 
         Cell cell = get(x, y);
-
+        String line = cell.getData();
         //A cell that is not a formula can be calculated immediately.
-        if ((cell == null || cell.getType() != Ex2Utils.FORM)) {
+        if (line == null || cell.getType() != Ex2Utils.FORM) {
             return true;
         }
 
         // Get the list of cells on which the current cell depends
-        List<String> dependencies = findDependentCells(cell.getData());
-
-//        if (dependencies.isEmpty()) {
-//            return true;
-//        }
-
+        List<String> dependencies = findDependentCells(line);
+        if (dependencies.isEmpty()) {
+            return true;
+        }
         CellEntry entry = new CellEntry();
         for (String dep : dependencies) {
             int depX = entry.getX(dep), depY = entry.getY(dep);

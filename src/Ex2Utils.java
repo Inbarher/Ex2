@@ -5,7 +5,7 @@
  *
  */
 public class Ex2Utils {
-    public static final int TEXT=1, NUMBER=2, FORM=3, ERR_FORM_FORMAT=-2, ERR_CYCLE_FORM=-1, ERR=-1;
+    public static final int TEXT=1, NUMBER=2, FORM=3, ERR_FORM_FORMAT=-2, ERR=-1, ERR_CYCLE_FORM=-1;
     public static final String ERR_CYCLE = "ERR_CYCLE!", ERR_FORM = "ERR_FORM!";
     public static final int WIDTH = 9, HEIGHT=17, MAX_CHARS=8, WINDOW_WIDTH=1200, WINDOW_HEIGHT=600;
     public static final int WAIT_TIME_MS = 10, MAX_X=20;
