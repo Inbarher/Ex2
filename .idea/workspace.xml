@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="more fixes...">
+    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="more test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Ex2Sheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex2Sheet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ex2Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex2Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SCell.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,23 +63,29 @@
     "JUnit.SCell.executor": "Run",
     "JUnit.SCell.testIsForm.executor": "Run",
     "JUnit.Tests.executor": "Run",
+    "JUnit.Tests.testComplexFormula.executor": "Run",
     "JUnit.Tests.testComputeForm.executor": "Run",
     "JUnit.Tests.testComputeFormulaWithValues.executor": "Run",
     "JUnit.Tests.testConstructor.executor": "Run",
+    "JUnit.Tests.testCyclicDependency.executor": "Run",
     "JUnit.Tests.testDepthCalculation.executor": "Run",
     "JUnit.Tests.testDepth_ComplexDependencies.executor": "Run",
     "JUnit.Tests.testDepth_Cycle.executor": "Run",
     "JUnit.Tests.testDepth_SimpleDependencies.executor": "Run",
+    "JUnit.Tests.testDivisionByZero.executor": "Run",
     "JUnit.Tests.testEvalCycleDetection.executor": "Run",
     "JUnit.Tests.testGet.executor": "Run",
     "JUnit.Tests.testGetTypeAndSetType.executor": "Run",
     "JUnit.Tests.testInvalidCellAccess.executor": "Run",
+    "JUnit.Tests.testInvalidCellReference.executor": "Run",
+    "JUnit.Tests.testInvalidFormula.executor": "Run",
     "JUnit.Tests.testIsForm.executor": "Run",
     "JUnit.Tests.testIsIn.executor": "Run",
     "JUnit.Tests.testMoreValueForCyclicDependency.executor": "Run",
     "JUnit.Tests.testSaveAndLoad.executor": "Run",
     "JUnit.Tests.testSetAndGet.executor": "Run",
     "JUnit.Tests.testSetDataAndGetData.executor": "Run",
+    "JUnit.Tests.testSimpleFormula.executor": "Run",
     "JUnit.Tests.testToString.executor": "Run",
     "JUnit.Tests.testValue.executor": "Run",
     "JUnit.Tests.testValueForCyclicDependency.executor": "Run",
@@ -130,6 +136,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SCell" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="SCell" />
+      <module name="Ex2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Tests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
@@ -139,31 +152,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tests.testDepth_SimpleDependencies" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Tests.testDepthCalculation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testDepth_SimpleDependencies" />
+      <option name="METHOD_NAME" value="testDepthCalculation" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tests.testMoreValueForCyclicDependency" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Tests.testEvalCycleDetection" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testMoreValueForCyclicDependency" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Tests.testValueForCyclicDependency" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Ex2" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testValueForCyclicDependency" />
+      <option name="METHOD_NAME" value="testEvalCycleDetection" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -172,10 +175,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.Tests" />
-        <item itemvalue="JUnit.Tests.testDepth_SimpleDependencies" />
+        <item itemvalue="JUnit.Tests.testDepthCalculation" />
+        <item itemvalue="Application.SCell" />
+        <item itemvalue="JUnit.Tests.testEvalCycleDetection" />
         <item itemvalue="Application.Ex2GUI" />
-        <item itemvalue="JUnit.Tests.testMoreValueForCyclicDependency" />
-        <item itemvalue="JUnit.Tests.testValueForCyclicDependency" />
       </list>
     </recent_temporary>
   </component>
@@ -202,7 +205,7 @@
       <workItem from="1736160868450" duration="18665000" />
       <workItem from="1736233048607" duration="17964000" />
       <workItem from="1736317916238" duration="58065000" />
-      <workItem from="1736512836351" duration="41856000" />
+      <workItem from="1736512836351" duration="48478000" />
     </task>
     <task id="LOCAL‎-00001" summary="Start">
       <option name="closed" value="true" />
@@ -356,7 +359,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1736738735820</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL‎-00020" summary="more test">
+      <option name="closed" value="true" />
+      <created>1736791106210</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL‎-00020" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1736791106210</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -402,22 +413,8 @@
     <MESSAGE value="fixes" />
     <MESSAGE value="more fixes" />
     <MESSAGE value="more fixes..." />
-    <option name="LAST_COMMIT_MESSAGE" value="more fixes..." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/Tests.java</url>
-          <line>313</line>
-          <properties class="Tests" method="testDepth_SimpleDependencies">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="more test" />
+    <option name="LAST_COMMIT_MESSAGE" value="more test" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

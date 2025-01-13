@@ -23,13 +23,21 @@ public class SCell implements Cell {
 
     public int whatType(String line) {
         if (isText(line)) {
-            type = Ex2Utils.TEXT;
+            if (line == Ex2Utils.ERR_FORM){
+                type = Ex2Utils.ERR_FORM_FORMAT;
+            }
+            else {
+                type = Ex2Utils.TEXT;
+            }
         }
         else if (isNumber(line)) {
             type = Ex2Utils.NUMBER;
         }
         else if (isForm(line)) {
             type = Ex2Utils.FORM;
+        }
+        else if (line == Ex2Utils.ERR_FORM) {
+            type = Ex2Utils.ERR_FORM_FORMAT;
         }
         else {
             type = Ex2Utils.ERR_FORM_FORMAT;
@@ -72,9 +80,6 @@ public class SCell implements Cell {
             return maxOrder + 1;
         }
         return Order;
-
-        //אם הסטרינג של התא מכיל בתוכו תא אחר אז אז הסדר שווה לסדר של התא שבפנים ועוד 1
-        //אם הסטרינג של התא מכיל בתוכו כמה תאים אז ניקח את התא שהסדר שלו הוא המקסימלי מבינהם ונוסיף לו אחד
     }
 
     @Override
@@ -205,17 +210,6 @@ public class SCell implements Cell {
         //Otherwise it is not a formula.
         return false;
     }
-    public static void main(String[] args) {
-        SCell A1 = new SCell("=1+2");
-        SCell A2 = new SCell("=A1+2");
-        SCell A3 = new SCell("=A1+A2+A3");
-        SCell A4 = new SCell("1");
-        A1.setData("=1");
 
-        System.out.println("type A1:" + A1.getType() + " type A2:" + A2.getType() + " type A3:" + A3.getType()+" type A4:"+A4.getType() );
-        System.out.println("order A1 "+A1.getOrder()+" order A2 "+A2.getOrder() +" order A3 "+A3.getOrder()+" order A4 "+A4.getOrder() );
-        System.out.println("A1:" + A1 + " A2:" + A2 + " A3:" + A3 + " A4:" + A4 );
-        //System.out.println(s.findDependentCells(s.toString()));
-    }
 
 }

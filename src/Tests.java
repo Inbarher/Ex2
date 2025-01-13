@@ -1,10 +1,10 @@
 import org.junit.jupiter.api.Test;
 
-    import java.io.File;
-    import java.io.IOException;
+import java.io.File;
+import java.io.IOException;
 
-    import static org.junit.jupiter.api.Assertions.*;
-    import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Tests {
 
@@ -63,8 +63,7 @@ public class Tests {
         assertEquals(Ex2Utils.NUMBER, sCell.whatType("123"));
         assertEquals(Ex2Utils.TEXT, sCell.whatType("hello"));
         assertEquals(Ex2Utils.FORM, sCell.whatType("=A1+B2"));
-//        assertEquals(Ex2Utils.ERR_CYCLE_FORM, sCell.whatType(Ex2Utils.ERR_CYCLE));
-//        assertEquals(Ex2Utils.ERR_FORM_FORMAT, sCell.whatType(Ex2Utils.ERR_FORM));
+
     }
 
     @Test
@@ -149,15 +148,15 @@ public class Tests {
         assertThrows(IndexOutOfBoundsException.class, () -> sheet.set(3, 3, "10"));
     }
 
-//    @Test
-//    void testEvalCycleDetection() {
-//        Ex2Sheet sheet = new Ex2Sheet(3, 3);
-//        sheet.set(0, 0, "=B0+1");
-//        sheet.set(1, 0, "=A0");
-//        sheet.eval();
-//        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 0));
-//        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(1, 0));
-//    }
+    @Test
+    void testEvalCycleDetection() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "=B0+1");
+        sheet.set(1, 0, "=A0");
+        sheet.eval();
+        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 0));
+        assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(1, 0));
+    }
 
     @Test
     void testSaveAndLoad() throws IOException {
@@ -188,15 +187,17 @@ public class Tests {
 
     @Test
     void testDepthCalculation() {
-        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        Ex2Sheet sheet = new Ex2Sheet(4, 4);
         sheet.set(0, 0, "10");
         sheet.set(1, 0, "=A0+5");
         sheet.set(2, 0, "=B0*2");
+        sheet.set(3 ,0, "=D0");
         int[][] depths = sheet.depth();
-//        sheet.eval();
-//        assertEquals(0, depths[0][0]);
-//        assertEquals(0, depths[1][0]);
-//        assertEquals(0, depths[2][0]);
+        sheet.eval();
+        assertEquals(1, depths[0][0]);
+        assertEquals(1, depths[1][0]);
+        assertEquals(1, depths[2][0]);
+        assertEquals(-1, depths[3][0]);
     }
 
     @Test
@@ -236,6 +237,71 @@ public class Tests {
        assertEquals(24.0, sheet.computeForm("=4*(2+2+2)"));
        assertEquals(24.0, sheet.computeForm("=24"));
        assertThrows(NumberFormatException.class, () -> sheet.computeForm("invalid"));
+    }
+
+    @Test
+    void testSimpleFormula() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "5");
+        sheet.set(0, 1, "=A0+5");
+        assertEquals("10.0", sheet.computeFormulaWithValues("=A0+5"), "Simple addition should be calculated correctly.");
+    }
+
+    @Test
+    void testDivisionByZero() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "5");
+        assertEquals("Infinity", sheet.computeFormulaWithValues("=A0/0"), "Division by zero should return 'Infinity'.");
+    }
+
+
+    @Test
+    void testInvalidFormula() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        assertEquals(Ex2Utils.ERR_FORM, sheet.computeFormulaWithValues("=A0+B#"), "Invalid formula should return 'ERR'.");
+    }
+
+    @Test
+    void testCyclicDependency() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "=A1+1");
+        sheet.set(0, 1, "=A0+1");
+        assertEquals(Ex2Utils.ERR_FORM, sheet.computeFormulaWithValues("=A0"), "Cyclic dependency should return 'ERR'.");
+    }
+
+    @Test
+    void testMultipleDependencies() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "5");
+        sheet.set(0, 1, "10");
+        sheet.set(0, 2, "=A0+A1");
+        assertEquals("15.0", sheet.computeFormulaWithValues("=A0+A1"), "Formula with multiple dependencies should be calculated correctly.");
+    }
+
+    @Test
+    void testNestedFormula() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "5");
+        sheet.set(0, 1, "=A0+5");
+        sheet.set(0, 2, "=A1*2");
+        assertEquals("20.0", sheet.computeFormulaWithValues("=A2"), "Nested formulas should be calculated correctly.");
+    }
+
+    @Test
+    void testFormulaWithParentheses() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "5");
+        sheet.set(0, 1, "10");
+        assertEquals("30.0", sheet.computeFormulaWithValues("=(A0+A1)*2"), "Formula with parentheses should be calculated correctly.");
+    }
+
+    @Test
+    void testComplexFormula() {
+        Ex2Sheet sheet = new Ex2Sheet(3, 3);
+        sheet.set(0, 0, "12");
+        sheet.set(0, 1, "1.5");
+        sheet.set(0, 2, "=A0*A1+20/(A0-2)");
+        assertEquals("20.0", sheet.computeFormulaWithValues("=A2"), "Complex formulas should be calculated correctly.");
     }
 
     @Test
@@ -281,12 +347,6 @@ public class Tests {
         assertEquals(4, cellEntry.getY("d4"));
         assertEquals(1, cellEntry.getY("a1"));
         assertEquals(99, cellEntry.getY("j99"));
-    }
-
-    @Test
-    void testGet(){
-//        Ex2Sheet ex2Sheet = new Ex2Sheet(2,5);
-//      assertEquals(0, ex2Sheet.get("A0"));
     }
 
 
@@ -372,6 +432,9 @@ public class Tests {
         Ex2Sheet sheet = new Ex2Sheet(5, 5);
         sheet.set(2, 3, "42");
         assertEquals("42.0", sheet.value(2, 3), "Number printed as double.");
+        sheet.set(0,0,".2");
+        assertEquals("0.2", sheet.value(0, 0), "Number printed as double.");
+
     }
 
     @Test
@@ -390,6 +453,7 @@ public class Tests {
         assertEquals("15.0", sheet.value(0, 2), "The value of a formula cell should be the calculated result.");
     }
 
+
     @Test
     void testValueForEmptyCell() {
         Ex2Sheet sheet = new Ex2Sheet(5, 5);
@@ -403,12 +467,11 @@ public class Tests {
         assertEquals(Ex2Utils.ERR_FORM, sheet.value(0, 0), "An invalid formula should return an error string.");
     }
 
-
     @Test
     void testValueForCyclicDependency() {
         Ex2Sheet sheet = new Ex2Sheet(5, 5);
-        sheet.set(0, 0, "=A0");
-        sheet.set(0, 1, "=A1");
+        sheet.set(0, 0, "=A0+1");
+        sheet.set(0, 1, "=A1+4");
         sheet.eval();
         assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 0), "A cyclic dependency should return a cycle error.");
         assertEquals(Ex2Utils.ERR_CYCLE, sheet.value(0, 1), "A cyclic dependency should return a cycle error.");
