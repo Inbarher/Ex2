@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-// Add your documentation below:
+import java.util.Objects;
 
 public class Ex2Sheet implements Sheet {
     //Holds all cells in the sheet
@@ -20,22 +20,26 @@ public class Ex2Sheet implements Sheet {
         }
         eval();
     }
+
     public Ex2Sheet() {
         this(Ex2Utils.WIDTH, Ex2Utils.HEIGHT);
     }
-    //הערך שצריך להיות מוצג בתא. אם זה נוסחה אז החישוב הסופי
+    //The value that should be displayed in the cell. If it is a formula then the final calculation
     @Override
     public String value(int x, int y) {
         Cell c = get(x, y);
-        List<String> dependencies = findDependentCells(c.getData());
-        for (String dep : dependencies) {
-            int depX = new CellEntry().getX(dep);
-            int depY = new CellEntry().getY(dep);
-            if (get(depX, depY).getData().equals("")) {
-                c.setType(Ex2Utils.ERR_FORM_FORMAT);
-                return Ex2Utils.ERR_FORM;
-            }
-        }
+//        List<String> dependencies = findDependentCells(c.getData());
+//        for (String dep : dependencies) {
+//            int depX = new CellEntry().getX(dep);
+//            int depY = new CellEntry().getY(dep);
+//            if (get(depX, depY).getData().equals("")) {
+//                c.setType(Ex2Utils.ERR_FORM_FORMAT);
+//                return Ex2Utils.ERR_FORM;
+//            }
+//        }
+       // markCyclicErrorCycle(x, y);
+        //markCyclicError (x, y);
+
         if (c != null) {
             return eval(x,y);
         }
@@ -138,21 +142,22 @@ public class Ex2Sheet implements Sheet {
                         //  get(i,j).setData(Ex2Utils.ERR_CYCLE);
 
                         get(i,j).setType(Ex2Utils.ERR_CYCLE_FORM);
-                        List<String> dependencies = findDependentCells(get(i,j).getData());
-                        for (String dep : dependencies) {
-                            int depX = new CellEntry().getX(dep);
-                            int depY = new CellEntry().getY(dep);
-
-                                get(depX,depY).setType(Ex2Utils.ERR_CYCLE_FORM);
-                        }
-                        markCyclicError(i,j);
+//                        List<String> dependencies = findDependentCells(get(i,j).getData());
+//                        for (String dep : dependencies) {
+//                            int depX = new CellEntry().getX(dep);
+//                            int depY = new CellEntry().getY(dep);
+//
+//                                get(depX,depY).setType(Ex2Utils.ERR_CYCLE_FORM);
+//                        }
+                        //markCyclicErrorCycle(i,j);
+                       // markCyclicError (i,j);
                     }
                 }
             }
         }
     }
 
-    private void markCyclicError(int x, int y) {
+    private void markCyclicErrorCycle(int x, int y) {
         Cell cell = get(x, y);
         if (cell == null || cell.getType() != Ex2Utils.ERR_CYCLE_FORM) {
             return; // Exit if the cell is not marked with a cyclic error
@@ -172,7 +177,34 @@ public class Ex2Sheet implements Sheet {
                 // Mark the dependent cell with a cyclic error if not already marked
                 if (dependentCell != null && dependentCell.getType() != Ex2Utils.ERR_CYCLE_FORM) {
                     dependentCell.setType(Ex2Utils.ERR_CYCLE_FORM);
-                    markCyclicError(depX, depY); // Recursively mark all dependent cells
+                    //markCyclicErrorCycle(depX, depY); // Recursively mark all dependent cells
+                }
+            }
+        }
+    }
+
+    private void markCyclicError(int x, int y) {
+        Cell cell = get(x, y);
+
+        if (cell == null || Objects.equals(cell.getData(), "") || cell.getType() != Ex2Utils.ERR_FORM_FORMAT) {
+            return;
+        }
+
+        // Find dependent cells
+        List<String> dependencies = findDependentCells(cell.getData());
+        for (String dep : dependencies) {
+            CellEntry entry = new CellEntry();
+            int depX = entry.getX(dep);
+            int depY = entry.getY(dep);
+
+            // Check if the dependent cell is within bounds
+            if (isIn(depX, depY)) {
+                Cell dependentCell = get(depX, depY);
+
+                // Mark the dependent cell with a cyclic error if not already marked
+                if (dependentCell.getType() == Ex2Utils.ERR_CYCLE_FORM) {
+                    cell.setType(Ex2Utils.ERR_CYCLE_FORM);
+                   // markCyclicErrorCycle(depX, depY); // Recursively mark all dependent cells
                 }
             }
         }
@@ -182,7 +214,6 @@ public class Ex2Sheet implements Sheet {
     public boolean isIn(int xx, int yy) {
         boolean ans = xx >= 0 && xx < width() && yy >= 0 && yy < height();
 
-        /////////////////////
         return ans;
     }
 
@@ -192,20 +223,20 @@ public class Ex2Sheet implements Sheet {
         int depth = 0, count = 0, max = width() * height();
         boolean flagC = true;
 
-        // אתחול המטריצה לערכי -1
+        // Initialize the matrix to values of -1
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
                 ans[i][j] = -1;
             }
         }
 
-        // לולאה ראשית לחישוב עומקי התאים
+        // Main loop for calculating cell depths
         while (count < max && flagC) {
             flagC = false;
 
             for (int x = 0; x < width(); x++) {
                 for (int y = 0; y < height(); y++) {
-                    if (canBeComputedNow(x, y, ans)) { // בדיקה אם ניתן לחשב תא זה
+                    if (canBeComputedNow(x, y, ans)) {
                         ans[x][y] = depth;
                         count++;
                         flagC = true;
@@ -219,80 +250,78 @@ public class Ex2Sheet implements Sheet {
         return ans;
     }
 
-    public  Double computeFormWithDependencies(String formula) {
+    public Double computeFormWithDependencies(String formula) {
         List<String> dependencies = findDependentCells(formula);
         for (String dep : dependencies) {
             int depX = new CellEntry().getX(dep);
             int depY = new CellEntry().getY(dep);
             if (depX >= 0 && depY >= 0 && isIn(depX, depY)) {
-                return values[depX][depY]; // השתמש בערך המחושב
+                return values[depX][depY]; // Use the calculated value
             }
-
         }
         return computeForm(formula);
     }
 
 
-    //  פונקציה הבודקת אם ניתן לחשב את התא בהתחשב בתלות בתאים אחרים
-
+    //  Checks whether the cell can be calculated considering dependencies on other cells
     private boolean canBeComputedNow(int x, int y, int[][] ans) {
 
         Cell cell = get(x, y);
 
+        //A cell that is not a formula can be calculated immediately.
         if ((cell == null || cell.getType() != Ex2Utils.FORM)) {
-            return true; // תא שאינו נוסחה ניתן לחשב מיד
+            return true;
         }
 
+        // Get the list of cells on which the current cell depends
+        List<String> dependencies = findDependentCells(cell.getData());
 
-
-        // קבלת רשימת התאים עליהם תלוי התא הנוכחי
-        String formula = cell.getData();
-        //SCell tempCell = new SCell(formula);
-        List<String> dependencies = findDependentCells(formula);
+//        if (dependencies.isEmpty()) {
+//            return true;
+//        }
 
         CellEntry entry = new CellEntry();
         for (String dep : dependencies) {
             int depX = entry.getX(dep), depY = entry.getY(dep);
 
+            //Cannot be calculated if one of the cells on which the cell depends has not yet been calculated.
             if (!isIn(depX, depY) || ans[depX][depY] == -1)  {
-                return false; // לא ניתן לחשב אם אחד התאים עליהם תלוי התא טרם חושב
+                return false;
             }
-
         }
-
         return true;
     }
 
     @Override
     public void load(String fileName) throws IOException {
 
-        // איפוס כל התאים לפני טעינת המידע מחדש
+        // Reset all cells before reloading information
         for (int i = 0; i < width(); i++) {
             for (int j = 0; j < height(); j++) {
-                set(i, j, ""); // אפס את התאים עם ערך ריק או ברירת מחדל
+                set(i, j, ""); // Reset cells with a blank or default value
             }
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    // פיצול השורה לפי פסיקים
+                    // Split the line by commas
                     String[] parts = line.split(",");
                     if (parts.length != 3) {
                         throw new IOException("Invalid file format: each line must contain row,col,value.");
                     }
 
-                    // פירוק השדות
-                    int row = Integer.parseInt(parts[0]); // אינדקס שורה
-                    int col = Integer.parseInt(parts[1]); // אינדקס עמודה
-                    String value = parts[2];             // הערך של התא
+                    // split
+                    int row = Integer.parseInt(parts[0]); // Row index
+                    int col = Integer.parseInt(parts[1]); // Column index
+                    String value = parts[2];             // Value of index
 
-                    // בדיקת תקינות הקואורדינטות
+                    // Checking the correctness of the coordinates
                     if (!isIn(row, col)) {
                         throw new IndexOutOfBoundsException("Cell coordinates out of bounds in file: " + row + "," + col);
                     }
 
-                    // עדכון התא בגיליון
+                    // Update the cell in the sheet
                     set(row, col, value);
                 }
             }
@@ -308,10 +337,10 @@ public class Ex2Sheet implements Sheet {
                     Cell cell = get(row, col);
 
                     if (cell != null && !cell.getData().isEmpty()) {
-                        // שמירת ה-value, שורת המערך, ועמודת המערך
+
                         String line =  row + "," + col + "," + cell.getData();
                         writer.write(line);
-                        writer.newLine(); // מעבר לשורה חדשה
+                        writer.newLine();
                     }
                 }
             }
@@ -326,19 +355,8 @@ public class Ex2Sheet implements Sheet {
         }
         Cell cell = get(x, y);
         if (cell != null && cell.getType() == Ex2Utils.ERR_CYCLE_FORM){
-//            List<String> dependencies = findDependentCells(cell.getData());
-//            for (String dep : dependencies) {
-//                int depX = new CellEntry().getX(dep);
-//                int depY = new CellEntry().getY(dep);
-//                if (depX >= 0 && depY >= 0 && isIn(depX, depY))
-//                    get(depX,depY).setType(Ex2Utils.ERR_CYCLE_FORM);
-//            }
-            markCyclicError(x, y);
             return Ex2Utils.ERR_CYCLE;
 
-//        }
-//        else if (cell != null && cell.getType() == Ex2Utils.ERR_FORM_FORMAT) {
-//            return Ex2Utils.ERR_FORM;
         }
         else if (cell != null && cell.getType() == Ex2Utils.NUMBER) {
             return String.valueOf(cell.getData());
@@ -467,44 +485,41 @@ public class Ex2Sheet implements Sheet {
     }
 
     public String computeFormulaWithValues(String formula) {
-//        if (!formula.startsWith("=")) {
-//            return formula; // אם לא נוסחה, פשוט להחזיר את התוכן המקורי
-//        }
 
-        // הסרת הסימן '=' מהנוסחה
         formula = formula.substring(1).trim();
 
-        // זיהוי התאים התלויים בנוסחה
-        //SCell tempCell = new SCell(formula);
+        // Identifying cells that depend on a formula
         List<String> dependencies = findDependentCells(formula);
 
-        // החלפת כל שם תא בערך שלו
+        // Replacing each cell name with its value
         for (String dep : dependencies) {
             CellEntry entry = new CellEntry();
             int depX = entry.getX(dep);
             int depY = entry.getY(dep);
 
             if (isIn(depX, depY)) {
-                String value = value(depX, depY); // קבלת הערך של התא התלוי
+
+                // Getting the value of the dependent cell
+                String value = value(depX, depY);
+
                 if (value == null || value.isEmpty()) {
-                    value = ""; // ברירת מחדל אם התא ריק
+                    value = "";
                 }
                 formula = formula.replace(dep, value);
             } else {
                 throw new IllegalArgumentException("Dependent cell out of bounds: " + dep);
             }
         }
-
-        // חישוב הערך של הנוסחה לאחר ההחלפה
-
+        // Calculating the value of the formula after substitution
         Double result = computeForm(formula);
         return result.toString();
     }
 
+    //Finds the cells that the cell depends on
     public List<String> findDependentCells(String ord) {
         List<String> dependentCells = new ArrayList<>();
 
-        // מפצלים את הסטרינג לפי "=" "+", "-", "*", "/", ")", "(" בלבד
+        // Split the string by "=", "+", "-", "*", "/", ")", "(" only
         String[] tokens = ord.split("[=+\\-*/)(]+");
         CellEntry entry = new CellEntry();
         for (String token : tokens) {

@@ -9,24 +9,20 @@ public class SCell implements Cell {
     private String line;
     private int type;
     private int Order;
-    // Add your code here
 
-    public SCell(String s) {
-        setData(s);
-    }
+    // Default constructor
     public SCell() {
         setData(null);
     }
 
+    public SCell(String s) {
+        setData(s);
+    }
+
+
 
     public int whatType(String line) {
-        if (line == Ex2Utils.ERR_CYCLE){
-            type = Ex2Utils.ERR_CYCLE_FORM;
-        }
-        else if (line == Ex2Utils.ERR_FORM){
-            type = Ex2Utils.ERR_FORM_FORMAT;
-        }
-        else if (isText(line)) {
+        if (isText(line)) {
             type = Ex2Utils.TEXT;
         }
         else if (isNumber(line)) {
@@ -34,9 +30,6 @@ public class SCell implements Cell {
         }
         else if (isForm(line)) {
             type = Ex2Utils.FORM;
-        }
-        else if (line == Ex2Utils.ERR_CYCLE) {
-            type = Ex2Utils.ERR_CYCLE_FORM;
         }
         else {
             type = Ex2Utils.ERR_FORM_FORMAT;
@@ -82,32 +75,22 @@ public class SCell implements Cell {
 
         //אם הסטרינג של התא מכיל בתוכו תא אחר אז אז הסדר שווה לסדר של התא שבפנים ועוד 1
         //אם הסטרינג של התא מכיל בתוכו כמה תאים אז ניקח את התא שהסדר שלו הוא המקסימלי מבינהם ונוסיף לו אחד
-
     }
 
     @Override
     public String toString() {
-//        if (type == Ex2Utils.ERR_FORM_FORMAT && line.isEmpty() == false ) {
-//            return Ex2Utils.ERR_FORM;
-//        }
-//        if (type == Ex2Utils.ERR_CYCLE_FORM && line.isEmpty() == false) {
-//            return Ex2Utils.ERR_CYCLE;
-//        }
         return getData();
     }
 
     @Override
     public void setData(String s) {
-        // Add your code here
         this.line = s;
         this.type = whatType(s);
         this.Order = getOrder();
-
-
     }
 
     @Override
-    public String getData() {//מה שאני קולטת מהמתא
+    public String getData() {
         if (type == Ex2Utils.NUMBER) {
             line = String.valueOf(Double.parseDouble(line));
         }
@@ -134,7 +117,6 @@ public class SCell implements Cell {
         if (text == null || text.isEmpty()) {
             return false;
         }
-
         try{
             Double.parseDouble(text);
             return true;
@@ -144,19 +126,14 @@ public class SCell implements Cell {
         }
     }
 
-
-
     public boolean isText(String text) {
         if (text == null || text.isEmpty()) {
             return false;
         }
-       // boolean result = true;
         if (text.charAt(0)=='=' || isNumber(text)) {
             return false;
         }
-        else {
-            return true;
-        }
+        return true;
     }
 
     public boolean isForm(String form) {
