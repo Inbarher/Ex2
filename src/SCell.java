@@ -1,84 +1,62 @@
 
-// Add your documentation below:
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SCell implements Cell {
 
     private String line;
     private int type;
     private int Order;
+    private Double Value;
 
     // Default constructor
     public SCell() {
-        setData(null);
+        setLine("");
     }
 
     public SCell(String s) {
-        setData(s);
+        setLine(s);
     }
 
+    @Override
+    public Double getValue() {
+        return this.Value;
+    }
 
+    @Override
+    public void setValue(Double value) {
+        Value = value ;
+    }
 
     public int whatType(String line) {
-        if (isText(line)) {
-            if (line == Ex2Utils.ERR_FORM){
-                type = Ex2Utils.ERR_FORM_FORMAT;
-            }
-            else {
-                type = Ex2Utils.TEXT;
-            }
-        }
-        else if (isNumber(line)) {
+        if (isNumber(line)) {
             type = Ex2Utils.NUMBER;
         }
         else if (isForm(line)) {
             type = Ex2Utils.FORM;
         }
-        else if (line == Ex2Utils.ERR_FORM) {
+        else if (!line.isEmpty() && line.charAt(0) == '=') {
             type = Ex2Utils.ERR_FORM_FORMAT;
         }
         else {
-            type = Ex2Utils.ERR_FORM_FORMAT;
+            type = Ex2Utils.TEXT;
         }
-
         return type;
-
     }
 
     CellEntry entry = new CellEntry();
 
     @Override
-    public int getOrder() {
-        Order = -2;
-        String ord = getData();
-        if (ord == null || ord.isEmpty()) {
-            Order = 0;
-        }
-        else if (isNumber(ord) || isText(ord)) {
-            Order = 0;
-        }
-        else if (isForm(ord)) {
-            List<String> dependentCells = new Ex2Sheet().findDependentCells(ord);
-            int minOrder = 0;
-            int maxOrder = 0;
-            for (String dependentCell : dependentCells) {
-                if (entry.isValid(dependentCell)) {
-                    Cell c = new SCell(dependentCell);
-                    // חישוב הסדר עבור כל תא תלוי
-                    int dependentOrder = c.getOrder();
+    public String getLine() {
+        return line;
+    }
+    @Override
+    public void setLine(String line) {
+        this.line = line;
+        setData();
+    }
 
-                    if(dependentOrder==-2){
-                        return Ex2Utils.ERR_CYCLE_FORM;
-                    }
-                    maxOrder = Math.max(maxOrder, dependentOrder);
-                } else {
-                    throw new IllegalArgumentException("Invalid dependent cell: " + dependentCell);
-                }
-            }
-            return maxOrder + 1;
-        }
+
+    @Override
+    public int getOrder() {
         return Order;
     }
 
@@ -88,10 +66,15 @@ public class SCell implements Cell {
     }
 
     @Override
-    public void setData(String s) {
-        this.line = s;
+    public void setData() {
+        String s = this.line;
         this.type = whatType(s);
-        this.Order = getOrder();
+        if (this.type == Ex2Utils.NUMBER) {
+            this.Value = Double.parseDouble(s);
+        } else {
+            this.Value = null;
+        }
+
     }
 
     @Override

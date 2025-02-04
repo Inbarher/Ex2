@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="more test">
+    <list default="true" id="25376338-8b90-4489-8810-4ce2b4ddf363" name="Changes" comment="more test...">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CellEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CellEntry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Ex2Sheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex2Sheet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SCell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SCell.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Tests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tests.java" afterDir="false" />
@@ -74,6 +76,7 @@
     "JUnit.Tests.testDepth_SimpleDependencies.executor": "Run",
     "JUnit.Tests.testDivisionByZero.executor": "Run",
     "JUnit.Tests.testEvalCycleDetection.executor": "Run",
+    "JUnit.Tests.testFormulaWithParentheses.executor": "Run",
     "JUnit.Tests.testGet.executor": "Run",
     "JUnit.Tests.testGetTypeAndSetType.executor": "Run",
     "JUnit.Tests.testInvalidCellAccess.executor": "Run",
@@ -82,6 +85,8 @@
     "JUnit.Tests.testIsForm.executor": "Run",
     "JUnit.Tests.testIsIn.executor": "Run",
     "JUnit.Tests.testMoreValueForCyclicDependency.executor": "Run",
+    "JUnit.Tests.testMultipleDependencies.executor": "Run",
+    "JUnit.Tests.testNestedFormula.executor": "Run",
     "JUnit.Tests.testSaveAndLoad.executor": "Run",
     "JUnit.Tests.testSetAndGet.executor": "Run",
     "JUnit.Tests.testSetDataAndGetData.executor": "Run",
@@ -136,13 +141,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SCell" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SCell" />
-      <module name="Ex2" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Tests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
@@ -152,33 +150,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tests.testDepthCalculation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Tests.testDepth_Cycle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testDepthCalculation" />
+      <option name="METHOD_NAME" value="testDepth_Cycle" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tests.testEvalCycleDetection" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Tests.testSetDataAndGetData" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Ex2" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="Tests" />
-      <option name="METHOD_NAME" value="testEvalCycleDetection" />
+      <option name="METHOD_NAME" value="testSetDataAndGetData" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="Ex2Sol_v0.2.jar-obf.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/src/Ex2Sol_v0.2.jar-obf.jar" />
+      <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.Tests" />
-        <item itemvalue="JUnit.Tests.testDepthCalculation" />
-        <item itemvalue="Application.SCell" />
-        <item itemvalue="JUnit.Tests.testEvalCycleDetection" />
         <item itemvalue="Application.Ex2GUI" />
+        <item itemvalue="JUnit.Tests.testDepth_Cycle" />
+        <item itemvalue="JAR Application.Ex2Sol_v0.2.jar-obf.jar" />
+        <item itemvalue="JUnit.Tests.testSetDataAndGetData" />
       </list>
     </recent_temporary>
   </component>
@@ -205,7 +207,8 @@
       <workItem from="1736160868450" duration="18665000" />
       <workItem from="1736233048607" duration="17964000" />
       <workItem from="1736317916238" duration="58065000" />
-      <workItem from="1736512836351" duration="48478000" />
+      <workItem from="1736512836351" duration="74725000" />
+      <workItem from="1736905109044" duration="21050000" />
     </task>
     <task id="LOCAL‎-00001" summary="Start">
       <option name="closed" value="true" />
@@ -367,7 +370,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1736791106210</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL‎-00021" summary="more test...">
+      <option name="closed" value="true" />
+      <created>1736797814382</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL‎-00021" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1736797814382</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -414,7 +425,15 @@
     <MESSAGE value="more fixes" />
     <MESSAGE value="more fixes..." />
     <MESSAGE value="more test" />
-    <option name="LAST_COMMIT_MESSAGE" value="more test" />
+    <MESSAGE value="more test..." />
+    <option name="LAST_COMMIT_MESSAGE" value="more test..." />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="SCell" memberName="Value" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

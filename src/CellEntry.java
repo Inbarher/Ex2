@@ -1,5 +1,3 @@
-// Add your documentation below:
-
 public class CellEntry  implements Index2D {
     private String cords;
     private int x;
@@ -88,6 +86,5 @@ public class CellEntry  implements Index2D {
     return ans;
 
     }
-
 
 }

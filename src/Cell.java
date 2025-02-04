@@ -14,7 +14,14 @@ public interface Cell {
 
 /** Changes the underline string of this cell
  *  */
-    void setData(String s);
+
+    public String getLine();
+
+    public void setLine(String line);
+
+
+
+    void setData();
 
 
     /**
@@ -38,5 +45,7 @@ public interface Cell {
      * Changes the order of this Cell
      * @param t
      */
+    public Double getValue();
+    public void setValue(Double value);
     public void setOrder(int t);
 }

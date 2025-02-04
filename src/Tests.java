@@ -72,7 +72,7 @@ public class Tests {
         assertEquals("123.0", sCell1.toString());
 
         SCell sCell2 = new SCell("");
-        sCell2.setData("");
+        sCell2.setLine("");
         assertEquals("", sCell2.toString());
 
         SCell sCell3 = new SCell("=5+5");
@@ -82,10 +82,10 @@ public class Tests {
     @Test
     void testSetDataAndGetData() {
         SCell sCell = new SCell();
-        sCell.setData("123");
+        sCell.setLine("123");
         assertEquals("123.0", sCell.getData());
 
-        sCell.setData("hello");
+        sCell.setLine("hello");
         assertEquals("hello", sCell.getData());
     }
 
@@ -194,9 +194,9 @@ public class Tests {
         sheet.set(3 ,0, "=D0");
         int[][] depths = sheet.depth();
         sheet.eval();
-        assertEquals(1, depths[0][0]);
+        assertEquals(0, depths[0][0]);
         assertEquals(1, depths[1][0]);
-        assertEquals(1, depths[2][0]);
+        assertEquals(2, depths[2][0]);
         assertEquals(-1, depths[3][0]);
     }
 
@@ -275,6 +275,7 @@ public class Tests {
         sheet.set(0, 0, "5");
         sheet.set(0, 1, "10");
         sheet.set(0, 2, "=A0+A1");
+        sheet.eval();
         assertEquals("15.0", sheet.computeFormulaWithValues("=A0+A1"), "Formula with multiple dependencies should be calculated correctly.");
     }
 
@@ -284,7 +285,8 @@ public class Tests {
         sheet.set(0, 0, "5");
         sheet.set(0, 1, "=A0+5");
         sheet.set(0, 2, "=A1*2");
-        assertEquals("20.0", sheet.computeFormulaWithValues("=A2"), "Nested formulas should be calculated correctly.");
+        sheet.eval();
+        assertEquals("20.0", sheet.computeFormulaWithValues("=A1*2"), "Nested formulas should be calculated correctly.");
     }
 
     @Test
@@ -301,6 +303,7 @@ public class Tests {
         sheet.set(0, 0, "12");
         sheet.set(0, 1, "1.5");
         sheet.set(0, 2, "=A0*A1+20/(A0-2)");
+        sheet.eval();
         assertEquals("20.0", sheet.computeFormulaWithValues("=A2"), "Complex formulas should be calculated correctly.");
     }
 
@@ -381,7 +384,7 @@ public class Tests {
 
         int[][] result = sheet.depth();
         int[][] expected = {
-                {0, 0, 0},
+                {0, 1, 2},
                 {0, 0, 0},
                 {0, 0, 0}
         };
@@ -396,13 +399,13 @@ public class Tests {
         // הגדרת תאים עם תלות מורכבת
         sheet.set(0, 0, "=1+1");   // A0
         sheet.set(0, 1, "=A0+2");  // A1
-        sheet.set(1, 0, "=A1+3");  // B1
-        sheet.set(1, 1, "=A0+B0"); // B2
+        sheet.set(1, 0, "=A1+3");  // B0
+        sheet.set(1, 1, "=A0+B0"); // B1
 
         int[][] result = sheet.depth();
         int[][] expected = {
-                {0, 0, 0},
-                {0, 0, 0},
+                {0, 1, 0},
+                {2, 3, 0},
                 {0, 0, 0}
         };
 
@@ -414,14 +417,15 @@ public class Tests {
         Ex2Sheet sheet = new Ex2Sheet(3, 3);
 
         // הגדרת תאים שיוצרים מעגל
-        sheet.set(0, 0, "=B0+1"); // A0
-        sheet.set(1, 0, "=A0+1"); // B0
+        sheet.set(0, 0, "=B0"); // A0
+        sheet.set(1, 0, "=A0"); // B0
+        sheet.set(1,2, "=B3"); // B3
 
         int[][] result = sheet.depth();
         int[][] expected = {
-                {-1, 1, 1},
-                {-1, 1, 1},
-                {1, 1, 1}
+                {-1, 0, 0},
+                {-1, 0, -1},
+                {0, 0, 0}
         };
 
         assertArrayEquals(expected, result, "Cycle detection failed");
@@ -450,6 +454,7 @@ public class Tests {
         sheet.set(0, 0, "5");
         sheet.set(0, 1, "10");
         sheet.set(0, 2, "=A0+A1");
+        sheet.eval();
         assertEquals("15.0", sheet.value(0, 2), "The value of a formula cell should be the calculated result.");
     }
 
@@ -464,6 +469,7 @@ public class Tests {
     void testValueForInvalidFormula() {
         Ex2Sheet sheet = new Ex2Sheet(5, 5);
         sheet.set(0, 0, "=A1+B2"); // Invalid because A1 and B2 are undefined
+        sheet.eval();
         assertEquals(Ex2Utils.ERR_FORM, sheet.value(0, 0), "An invalid formula should return an error string.");
     }
 

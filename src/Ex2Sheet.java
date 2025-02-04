@@ -6,8 +6,7 @@ import java.util.Objects;
 public class Ex2Sheet implements Sheet {
     //Holds all cells in the sheet
     private Cell[][] table;
-    //Holds computed values sheet
-    private Double [][] values;
+
 
 
     public Ex2Sheet(int x, int y) {
@@ -23,6 +22,7 @@ public class Ex2Sheet implements Sheet {
     public Ex2Sheet() {
         this(Ex2Utils.WIDTH, Ex2Utils.HEIGHT);
     }
+
     //The value that should be displayed in the cell. If it is a formula then the final calculation
     @Override
     public String value(int x, int y) {
@@ -67,11 +67,10 @@ public class Ex2Sheet implements Sheet {
         if (!isIn(x,y)) {
             throw new IndexOutOfBoundsException("Cell coordinates are out of the table's bounds.");
         }
-        Cell c = new SCell(s);
-        table[x][y] = c;
+        get(x,y).setLine(s);
     }
 
-    //A function that calculates the value of any cell that is a formula
+    //A function that calculates the value of any cell that is a formula By depth
     @Override
     public void eval() {
         int[][] dd = depth();
@@ -84,29 +83,35 @@ public class Ex2Sheet implements Sheet {
                 }
             }
         }
-        values = new Double[width()][height()];
+        for (int i = 0; i < width(); i++) {
+            for (int j = 0; j < height(); j++) {
+                if(dd[i][j]==-1){
+                    if(!get(i,j).toString().isEmpty()) {
+                        get(i,j).setType(Ex2Utils.ERR_CYCLE_FORM);
+                    }
+                }
+            }
+        }
 
-        for (int i = 0; i < maxDepth; i++) {
+
+        for (int i = 0; i <= maxDepth; i++) {
             for (int j = 0; j < width(); j++) {
                 for (int k = 0; k < height(); k++) {
-                    if (dd[j][k]==0){
+                    if (dd[j][k]==i){
                         String ans = null;
                         Cell c = get(j,k);
                         if (c != null){
                             ans = c.toString();
                         }
                         if (c.getType() == Ex2Utils.NUMBER) {
-                            values [j][k] = Double.parseDouble(ans);
+                            c.setValue(Double.parseDouble(ans));
                         }
                         else if (c.getType() == Ex2Utils.FORM){
                             try {
-                                values[j][k] = Double.valueOf(computeFormWithDependencies(ans));
-                                if (ans == Ex2Utils.ERR_FORM);
-                                c.setType(Ex2Utils.ERR_FORM_FORMAT);
+                                c.setValue(Double.valueOf(computeFormulaWithValues(ans)));
                             }
                             catch (Exception e){
-                                    c.setData(Ex2Utils.ERR_CYCLE);
-
+                                c.setType(Ex2Utils.ERR_FORM_FORMAT);
                             }
                         }
 
@@ -115,28 +120,37 @@ public class Ex2Sheet implements Sheet {
             }
         }
 
-        for (int i = 0; i < width(); i++) {
-            for (int j = 0; j < height(); j++) {
-                if(dd[i][j]==-1){
-                    if(!get(i,j).toString().isEmpty()) {
-                         get(i,j).setType(Ex2Utils.ERR_CYCLE_FORM);
-                    }
-                }
-            }
-        }
     }
 
     //Calculates the value of a formula, by placing the values of the cells on which it depends
-    public Double computeFormWithDependencies(String formula) {
-        List<String> dependencies = findDependentCells(formula);
-        for (String dep : dependencies) {
-            int depX = new CellEntry().getX(dep);
-            int depY = new CellEntry().getY(dep);
-            if (depX >= 0 && depY >= 0 && isIn(depX, depY)) {
-                return values[depX][depY]; // Use the calculated value
+    public String computeFormulaWithValues(String formula) {
+        try {
+            formula = formula.substring(1).trim();
+            List<String> dependencies = findDependentCells(formula);
+
+            for (String dep : dependencies) {
+                CellEntry entry = new CellEntry();
+                int depX = entry.getX(dep);
+                int depY = entry.getY(dep);
+
+                if (isIn(depX, depY)) {
+                    String a = String.valueOf(get(depX, depY).getValue());
+                    formula = formula.replace(dep, a);
+                }
+                else {
+                    return Ex2Utils.ERR_FORM;
+                }
             }
+
+            Double result = computeForm(formula);
+
+            if (result.isInfinite()) return "Infinity";
+            return result.toString();
+        } catch (ArithmeticException e) {
+            return "Infinity"; // חלוקה באפס
+        } catch (Exception e) {
+            return Ex2Utils.ERR_FORM; // שגיאה כללית
         }
-        return computeForm(formula);
     }
 
     @Override
@@ -145,9 +159,9 @@ public class Ex2Sheet implements Sheet {
 
         return ans;
     }
-    //Depth function checks for circular dependence.
-    // When the depth of a cell remains -1 then we know that this cell is circularly dependent.
-    //In the other cells, the depth represented the number of times he had to repeat the same action.
+    // Checks the depth of each cell.
+    // Depth function checks for circular dependence.
+    // When the depth of a cell remains -1 then we know that the cell type is a cycle error.
     @Override
     public int[][] depth() {
         int[][] ans = new int[width()][height()];
@@ -167,7 +181,7 @@ public class Ex2Sheet implements Sheet {
 
             for (int x = 0; x < width(); x++) {
                 for (int y = 0; y < height(); y++) {
-                    if (canBeComputedNow(x, y, ans)) {
+                    if (ans[x][y] == -1 && canBeComputedNow(x, y, ans, depth)) {
                         ans[x][y] = depth;
                         count++;
                         flagC = true;
@@ -182,11 +196,13 @@ public class Ex2Sheet implements Sheet {
     }
 
 
-    //  Checks whether the cell can be calculated considering dependencies on other cells
-    private boolean canBeComputedNow(int x, int y, int[][] ans) {
+    // Checks whether the cell can be calculated considering dependencies on other cells.
+    private boolean canBeComputedNow(int x, int y, int[][] ans, int depth) {
 
         Cell cell = get(x, y);
         String line = cell.getData();
+
+        cell.setData();
         //A cell that is not a formula can be calculated immediately.
         if (line == null || cell.getType() != Ex2Utils.FORM) {
             return true;
@@ -202,7 +218,7 @@ public class Ex2Sheet implements Sheet {
             int depX = entry.getX(dep), depY = entry.getY(dep);
 
             //Cannot be calculated if one of the cells on which the cell depends has not yet been calculated.
-            if (!isIn(depX, depY) || ans[depX][depY] == -1)  {
+            if (!isIn(depX, depY) || ans[depX][depY] == -1 || ans[depX][depY] == depth)  {
                 return false;
             }
         }
@@ -218,29 +234,28 @@ public class Ex2Sheet implements Sheet {
                 set(i, j, ""); // Reset cells with a blank or default value
             }
         }
-
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    // Split the line by commas
-                    String[] parts = line.split(",");
-                    if (parts.length != 3) {
-                        throw new IOException("Invalid file format: each line must contain row,col,value.");
-                    }
+              String line;
+              while ((line = reader.readLine()) != null) {
+                  // Split the line by commas
+                  String[] parts = line.split(",");
+                  if (parts.length != 3) {
+                      throw new IOException("Invalid file format: each line must contain row,col,value.");
+                  }
 
-                    // split
-                    int row = Integer.parseInt(parts[0]); // Row index
-                    int col = Integer.parseInt(parts[1]); // Column index
-                    String value = parts[2];             // Value of index
+                  // split
+                  int row = Integer.parseInt(parts[0]); // Row index
+                  int col = Integer.parseInt(parts[1]); // Column index
+                  String value = parts[2];             // Value of index
 
-                    // Checking the correctness of the coordinates
-                    if (!isIn(row, col)) {
-                        throw new IndexOutOfBoundsException("Cell coordinates out of bounds in file: " + row + "," + col);
-                    }
+                  // Checking the correctness of the coordinates
+                  if (!isIn(row, col)) {
+                      throw new IndexOutOfBoundsException("Cell coordinates out of bounds in file: " + row + "," + col);
+                  }
 
-                    // Update the cell in the sheet
-                    set(row, col, value);
-                }
+                  // Update the cell in the sheet
+                  set(row, col, value);
+              }
             }
 
     }
@@ -266,35 +281,23 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public String eval(int x, int y) {
-        String ans = null;
-        if(get(x,y)!=null) {
-            ans = get(x,y).toString();
-        }
+        eval();
         Cell cell = get(x, y);
 
-        if (ans == Ex2Utils.ERR_FORM) {
-            cell.setType(Ex2Utils.ERR_FORM_FORMAT);
-        }
-        if (cell != null && cell.getType() == Ex2Utils.ERR_CYCLE_FORM){
-            return Ex2Utils.ERR_CYCLE;
-        }
-        if (cell != null && cell.getType() == Ex2Utils.NUMBER) {
-            return cell.toString();
-        }
         if (cell != null && cell.getType() == Ex2Utils.FORM) {
-            return computeFormulaWithValues(cell.getData());
-        }
-        if (cell != null && cell.getType() == Ex2Utils.TEXT) {
-            return ans;
+            return String.valueOf(cell.getValue());
         }
         if (cell != null && cell.getData() == "") {
-            return ans;
+            return cell.toString();
         }
         if (cell != null && cell.getType() == Ex2Utils.ERR_FORM_FORMAT){
             return Ex2Utils.ERR_FORM;
         }
-        return ans;
+        if (cell != null && cell.getType() == Ex2Utils.ERR_CYCLE_FORM){
+            return Ex2Utils.ERR_CYCLE;
         }
+        return cell.toString();
+    }
 
 
     public Double computeForm(String form) {
@@ -303,7 +306,6 @@ public class Ex2Sheet implements Sheet {
         if (form.startsWith("=")) {
             form = form.substring(1).trim();
         }
-
 
         // Handle the case where the first character is '-' or '+'
         if (form.startsWith("+")) {
@@ -335,7 +337,6 @@ public class Ex2Sheet implements Sheet {
                 return -insideValue;
             }
         }
-
 
         //Search and calculate '+' and '-'
         int counter = 0;
@@ -398,37 +399,7 @@ public class Ex2Sheet implements Sheet {
         return Double.parseDouble(form);
     }
 
-    public String computeFormulaWithValues(String formula) {
-        try {
-            formula = formula.substring(1).trim();
-            List<String> dependencies = findDependentCells(formula);
 
-            for (String dep : dependencies) {
-                CellEntry entry = new CellEntry();
-                int depX = entry.getX(dep);
-                int depY = entry.getY(dep);
-
-                if (isIn(depX, depY)) {
-                    String value = value(depX, depY);
-                    if (value == null || value.isEmpty()) {
-                        value = "";
-                    }
-                    formula = formula.replace(dep, value);
-                }
-                else {
-                    return Ex2Utils.ERR_FORM;
-                }
-            }
-
-            Double result = computeForm(formula);
-            if (result.isInfinite()) return "Infinity";
-            return result.toString();
-        } catch (ArithmeticException e) {
-            return "Infinity"; // חלוקה באפס
-        } catch (Exception e) {
-            return Ex2Utils.ERR_FORM; // שגיאה כללית
-        }
-    }
 
 
     //Finds the cells that the cell depends on
